@@ -1,5 +1,19 @@
 <template>
   <v-list nav dense>
+    <template v-if="!$vuetify.breakpoint.mdAndUp">
+      <v-list-item
+        :key=" 'navbar' + index "
+        :to="item.path"
+        :exact="item.meta.exact"
+        v-for="(item,index) in navbar_items"
+      >
+        <v-list-item-icon>
+          <v-icon>mdi-{{item.meta.icon}}</v-icon>
+        </v-list-item-icon>
+
+        <v-list-item-title>{{item.meta.title}}</v-list-item-title>
+      </v-list-item>
+    </template>
     <template v-for="(item,index) in sidebar_items">
       <v-list-item
         v-if="!item.children"
@@ -35,18 +49,6 @@
       </v-list-group>
     </template>
     <template v-if="!$vuetify.breakpoint.mdAndUp">
-      <v-list-item
-        :key=" 'navbar' + index "
-        :to="item.path"
-        :exact="item.meta.exact"
-        v-for="(item,index) in navbar_items"
-      >
-        <v-list-item-icon>
-          <v-icon>mdi-{{item.meta.icon}}</v-icon>
-        </v-list-item-icon>
-
-        <v-list-item-title>{{item.meta.title}}</v-list-item-title>
-      </v-list-item>
       <v-list-item :to="{name:'login'}" :exact="true">
         <v-list-item-icon>
           <v-icon>mdi-lock</v-icon>

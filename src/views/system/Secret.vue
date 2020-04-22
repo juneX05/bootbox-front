@@ -1,0 +1,3 @@
+<template>
+  <h1>Welcome to the secret page.</h1>
+</template>

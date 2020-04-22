@@ -3,7 +3,7 @@
     <v-card>
       <v-card-title>Login Page</v-card-title>
       <v-divider/>
-      <v-form v-model="valid" @submit.prevent="login">
+      <v-form v-model="valid">
         <v-card-text>
           <v-col cols="12">
             <v-text-field
@@ -23,14 +23,15 @@
               dense
               outlined
             ></v-text-field>
-          </v-col> 
+          </v-col>
         </v-card-text>
         <v-card-actions>
           <v-row align="center" justify="center">
-            <v-btn color="primary" type="submit" :disabled="!valid">Login</v-btn>
+            <v-btn @click="login" color="primary" :disabled="!valid">Login</v-btn>
           </v-row>
         </v-card-actions>
       </v-form>
+      <div>{{errors}}</div>
     </v-card>
   </v-col>
 </template>
@@ -46,14 +47,13 @@ export default {
 				password: ""
 			},
 			valid: null,
+			errors: null,
 			...validations
 		};
 	},
 	methods: {
 		login() {
-			this.$axios.post("/login", this.form).then(res => {
-				console.log(res);
-			});
+      this.$store.dispatch('login',this.form);
 		}
 	}
 };
