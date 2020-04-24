@@ -9,8 +9,8 @@ import axios from "./plugins/axios";
 import router from "./router";
 import store from "./store/index";
 
-Vue.config.productionTip = false;
-Vue.config.devtools = false;
+Vue.config.productionTip = true;
+Vue.config.devtools = true;
 
 Vue.prototype.log = console.log;
 Vue.prototype.$axios = axios;

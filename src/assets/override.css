@@ -8,3 +8,6 @@
 .v-list-item__icon {
 	align-self: center;
 }
+.v-application a {
+	color: #fcfcfc !important;
+}
