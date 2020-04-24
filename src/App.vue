@@ -1,82 +1,91 @@
 <template>
 	<v-app id="inspire">
-		<v-app-bar dense dark app clipped-right>
-			<v-app-bar-nav-icon
-				@click.stop="drawer = !drawer"
-			></v-app-bar-nav-icon>
+		<v-row align="center" justify="center" v-if="loading">
+			<v-overlay opacity="1">
+				<v-progress-circular
+						indeterminate
+						size="64"
+				></v-progress-circular>
+			</v-overlay>
+		</v-row>
 
-			<v-toolbar-title>Breathe Box</v-toolbar-title>
+		<v-content align="center" v-show="!loading">
+			<v-app-bar app clipped-right dark dense>
+				<v-app-bar-nav-icon
+						@click.stop="drawer = !drawer"
+				></v-app-bar-nav-icon>
 
-			<v-spacer></v-spacer>
+				<v-toolbar-title>Breathe Box</v-toolbar-title>
 
-			<navbar></navbar>
+				<v-spacer></v-spacer>
 
-			<v-spacer />
+				<navbar></navbar>
 
-			<v-btn icon>
-				<v-icon>mdi-heart</v-icon>
-			</v-btn>
+				<v-spacer/>
 
-			<v-btn icon>
-				<v-icon>mdi-magnify</v-icon>
-			</v-btn>
+				<v-btn icon>
+					<v-icon>mdi-heart</v-icon>
+				</v-btn>
 
-			<v-menu left bottom>
-				<template v-slot:activator="{ on }">
-					<v-btn icon v-on="on">
-						<v-icon>mdi-dots-vertical</v-icon>
-					</v-btn>
-				</template>
+				<v-btn icon>
+					<v-icon>mdi-magnify</v-icon>
+				</v-btn>
 
-				<v-list>
-					<v-list-item v-for="n in 5" :key="n" @click="() => {}">
-						<v-list-item-title>Option {{ n }}</v-list-item-title>
+				<v-menu bottom left>
+					<template v-slot:activator="{ on }">
+						<v-btn icon v-on="on">
+							<v-icon>mdi-dots-vertical</v-icon>
+						</v-btn>
+					</template>
+
+					<v-list>
+						<v-list-item :key="n" @click="() => {}" v-for="n in 5">
+							<v-list-item-title>Option {{ n }}</v-list-item-title>
+						</v-list-item>
+					</v-list>
+				</v-menu>
+				<v-toolbar-items>
+					<v-list-item
+							:exact="true"
+							:to="{ name: 'login' }"
+							v-if="$vuetify.breakpoint.mdAndUp"
+					>
+						<v-list-item-icon>
+							<v-icon>mdi-lock</v-icon>
+						</v-list-item-icon>
+
+						<v-list-item-title>Login</v-list-item-title>
 					</v-list-item>
-				</v-list>
-			</v-menu>
-			<v-toolbar-items>
-				<v-list-item
-					:to="{ name: 'login' }"
-					:exact="true"
-					v-if="$vuetify.breakpoint.mdAndUp"
-				>
-					<v-list-item-icon>
-						<v-icon>mdi-lock</v-icon>
-					</v-list-item-icon>
+					<v-list-item
+							@click="true"
+							style="background-color:red"
+							v-if="$vuetify.breakpoint.mdAndUp"
+					>
+						<v-list-item-icon>
+							<v-icon>mdi-logout</v-icon>
+						</v-list-item-icon>
 
-					<v-list-item-title>Login</v-list-item-title>
-				</v-list-item>
-				<v-list-item
-					@click="true"
-					style="background-color:red"
-					v-if="$vuetify.breakpoint.mdAndUp"
-				>
-					<v-list-item-icon>
-						<v-icon>mdi-logout</v-icon>
-					</v-list-item-icon>
+						<v-list-item-title>Logout</v-list-item-title>
+					</v-list-item>
+					<v-list-item @click="rightDrawer = !rightDrawer">
+						<v-avatar>
+							<img
+									alt="John"
+									src="https://cdn.vuetifyjs.com/images/john.jpg"
+							/>
+						</v-avatar>
+					</v-list-item>
+				</v-toolbar-items>
+			</v-app-bar>
 
-					<v-list-item-title>Logout</v-list-item-title>
-				</v-list-item>
-				<v-list-item @click="rightDrawer = !rightDrawer">
-					<v-avatar>
-						<img
-							src="https://cdn.vuetifyjs.com/images/john.jpg"
-							alt="John"
-						/>
-					</v-avatar>
-				</v-list-item>
-			</v-toolbar-items>
-		</v-app-bar>
+			<v-navigation-drawer app dark left v-model="drawer">
+				<sidebar></sidebar>
+			</v-navigation-drawer>
 
-		<v-navigation-drawer v-model="drawer" app left dark>
-			<sidebar></sidebar>
-		</v-navigation-drawer>
+			<v-navigation-drawer app clipped dark right v-model="rightDrawer">
+				<rightsidebar></rightsidebar>
+			</v-navigation-drawer>
 
-		<v-navigation-drawer v-model="rightDrawer" app right clipped dark>
-			<rightsidebar></rightsidebar>
-		</v-navigation-drawer>
-
-		<v-content align="center">
 			<v-container fluid>
 				<router-view></router-view>
 			</v-container>
@@ -84,11 +93,11 @@
 			<v-row style="margin-top:100px;">
 				<v-footer :padless="true" absolute>
 					<v-card
-						dark
-						flat
-						tile
-						width="100%"
-						class="deep-purple accent-4 text-center"
+							class="deep-purple accent-4 text-center"
+							dark
+							flat
+							tile
+							width="100%"
 					>
 						<v-card-text class="white--text">
 							<div>
@@ -107,9 +116,9 @@
 				</v-footer>
 			</v-row>
 		</v-content>
+		<vue-progress-bar></vue-progress-bar>
 	</v-app>
 </template>
-
 <script>
 import sidebar from "./components/sidebar";
 import navbar from "./components/navbar";
@@ -144,7 +153,10 @@ export default {
 			set(value) {
 				this.open = value;
 			}
-		}
+        },
+        loading() {
+            return this.$store.getters.refreshingStatus;
+        }
 	}
 };
 </script>
