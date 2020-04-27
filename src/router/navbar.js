@@ -7,6 +7,7 @@ const navbar_routes = [
 		name: "home",
 		component: Home,
 		meta: {
+			auth: false,
 			title: "Home",
 			icon: "home"
 		}
@@ -16,6 +17,7 @@ const navbar_routes = [
 		name: "about",
 		component: About,
 		meta: {
+			auth: false,
 			title: "About",
 			icon: "information"
 		}

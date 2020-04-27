@@ -13,6 +13,7 @@
 			<v-app-bar app clipped-right dark dense>
 				<v-app-bar-nav-icon
 						@click.stop="drawer = !drawer"
+						v-if="$vuetify.breakpoint.smAndDown || authenticated"
 				></v-app-bar-nav-icon>
 
 				<v-toolbar-title>Breathe Box</v-toolbar-title>
@@ -23,32 +24,11 @@
 
 				<v-spacer/>
 
-				<v-btn icon>
-					<v-icon>mdi-heart</v-icon>
-				</v-btn>
-
-				<v-btn icon>
-					<v-icon>mdi-magnify</v-icon>
-				</v-btn>
-
-				<v-menu bottom left>
-					<template v-slot:activator="{ on }">
-						<v-btn icon v-on="on">
-							<v-icon>mdi-dots-vertical</v-icon>
-						</v-btn>
-					</template>
-
-					<v-list>
-						<v-list-item :key="n" @click="() => {}" v-for="n in 5">
-							<v-list-item-title>Option {{ n }}</v-list-item-title>
-						</v-list-item>
-					</v-list>
-				</v-menu>
 				<v-toolbar-items>
 					<v-list-item
 							:exact="true"
 							:to="{ name: 'login' }"
-							v-if="$vuetify.breakpoint.mdAndUp"
+							v-if="$vuetify.breakpoint.mdAndUp && !authenticated"
 					>
 						<v-list-item-icon>
 							<v-icon>mdi-lock</v-icon>
@@ -56,18 +36,7 @@
 
 						<v-list-item-title>Login</v-list-item-title>
 					</v-list-item>
-					<v-list-item
-							@click="true"
-							style="background-color:red"
-							v-if="$vuetify.breakpoint.mdAndUp"
-					>
-						<v-list-item-icon>
-							<v-icon>mdi-logout</v-icon>
-						</v-list-item-icon>
-
-						<v-list-item-title>Logout</v-list-item-title>
-					</v-list-item>
-					<v-list-item @click="rightDrawer = !rightDrawer">
+					<v-list-item @click="rightDrawer = !rightDrawer" v-show="authenticated">
 						<v-avatar>
 							<img
 									alt="John"
@@ -78,11 +47,13 @@
 				</v-toolbar-items>
 			</v-app-bar>
 
-			<v-navigation-drawer app dark left v-model="drawer">
+			<v-navigation-drawer
+					app dark left v-if="$vuetify.breakpoint.smAndDown || authenticated"
+					v-model="drawer">
 				<sidebar></sidebar>
 			</v-navigation-drawer>
 
-			<v-navigation-drawer app clipped dark right v-model="rightDrawer">
+			<v-navigation-drawer app clipped dark right v-if="authenticated" v-model="rightDrawer">
 				<rightsidebar></rightsidebar>
 			</v-navigation-drawer>
 
@@ -123,6 +94,7 @@
 import sidebar from "./components/sidebar";
 import navbar from "./components/navbar";
 import rightsidebar from "./components/right_sidebar";
+// import cookies from "js-cookie";
 
 export default {
 	components: {
@@ -136,14 +108,23 @@ export default {
 			rightDrawer: false
 		};
 	},
-	created() {
-		this.$store.dispatch("refreshToken");
+	mounted() {
 		this.initializeSidebar();
+		this.$store.dispatch("refreshToken");
 	},
 	methods: {
 		initializeSidebar() {
 			this.open = this.$vuetify.breakpoint.mdAndUp;
-		}
+		},
+
+		async routerInitialize() {
+			this.$router.beforeEach(() => {
+				this.$Progress.start();
+			});
+			this.$router.afterEach(() => {
+				this.$Progress.finish();
+			})
+		},
 	},
 	computed: {
 		drawer: {
@@ -153,10 +134,13 @@ export default {
 			set(value) {
 				this.open = value;
 			}
-        },
-        loading() {
-            return this.$store.getters.refreshingStatus;
-        }
+		},
+		loading() {
+			return this.$store.getters.refreshingStatus;
+		},
+		authenticated() {
+			return this.$store.state.token;
+		}
 	}
 };
 </script>

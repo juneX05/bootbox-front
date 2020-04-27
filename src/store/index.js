@@ -14,6 +14,10 @@ export default new Vuex.Store({
 	},
 
 	getters: {
+		getToken(state) {
+			return state.token;
+		},
+
 		refreshingStatus(state) {
 			return state.refreshing;
 		},
@@ -34,11 +38,15 @@ export default new Vuex.Store({
 
 		SET_ROLES(state, roles) {
 			state.roles = roles;
+		},
+
+		REMOVE_TOKEN(state) {
+			state.token = null;
 		}
 	},
 
 	actions: {
-		setToken({ commit }, { token, expiresIn }) {
+		async setToken({commit}, {token, expiresIn}) {
 			const expiryTime = new Date(
 				new Date().getTime() + expiresIn * 1000
 			);
@@ -51,32 +59,57 @@ export default new Vuex.Store({
 			commit("SET_REFRESHING_TOKEN", false);
 		},
 
-		async refreshToken({ dispatch, commit }) {
-			commit("SET_REFRESHING_TOKEN", true);
-			let data = await this._vm.$axios.post("/refresh-token");
-			const { token, expiresIn } = data.data;
-			dispatch("setToken", { token, expiresIn });
+		async refreshToken({dispatch, commit}, redirectTo = null) {
+			if (redirectTo === null) {
+				commit("SET_REFRESHING_TOKEN", true);
+			}
+
+			this._vm.$axios.post("/refresh-token").then(({data}) => {
+				const {token, expiresIn} = data;
+				dispatch("setToken", {token, expiresIn});
+
+				if (redirectTo !== null) {
+					router.push({name: redirectTo});
+				}
+			}).catch(() => {
+				if (redirectTo === null) {
+					commit("SET_REFRESHING_TOKEN", false);
+				}
+			});
 		},
 
-		async loadRoles({ commit }) {
-			await this._vm.$axios.get("/roles").then(({ data }) => {
+		checkRoute({dispatch}, {to, next, initial = false}) {
+			const token = cookies.get('x-access-token');
+			if (to.meta.auth === 'middle' && token !== undefined) {
+				return next({name: 'secret'});
+			} else if (to.meta.auth === true && token === undefined) {
+				if (initial) return next({name: 'login'});
+				else return dispatch('refreshToken', to.name);
+			} else {
+				if (initial) return next(to);
+				else return next();
+			}
+		},
+
+		async loadRoles({commit}) {
+			await this._vm.$axios.get("/roles").then(({data}) => {
 				const roles = data.data;
 				commit("SET_ROLES", roles);
 			});
 		},
 
-		async login({ dispatch }, data) {
-			await this._vm.$axios.post("/login", data).then(({ data }) => {
-				const { token, expiresIn } = data;
-				dispatch("setToken", { token, expiresIn });
+		async login({dispatch}, data) {
+			await this._vm.$axios.post("/login", data).then(({data}) => {
+				const {token, expiresIn} = data;
+				dispatch("setToken", {token, expiresIn});
+				router.push({name: "secret"});
 			});
-			router.push({ name: "secret" });
 		},
 
 		logout({ commit }) {
-			delete this._vm.$axios.defaults.headers.common.Authorization;
 			cookies.remove("x-access-token");
 			commit("REMOVE_TOKEN");
+			router.push({name: 'home'});
 		},
 
 		loader({ dispatch, getters }, data) {
@@ -84,8 +117,11 @@ export default new Vuex.Store({
 			function checker() {
 				if (!getters.refreshingStatus) {
 					clearInterval(id);
+					if ([null, undefined].includes(getters.getToken))
+						return;
+
 					if (typeof data === "object") {
-						const { action, payload } = data;
+						const {action, payload} = data;
 						dispatch(action, payload);
 					} else {
 						dispatch(data);
