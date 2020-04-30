@@ -5,7 +5,8 @@ import app from "../main";
 import cookies from "js-cookie";
 
 //axios instance
-axios.defaults.baseURL = "https://hy-api.herokuapp.com/api";
+// axios.defaults.baseURL = "https://hy-api.herokuapp.com/api";
+axios.defaults.baseURL = "http://bootbox-api.local/api";
 axios.defaults.withCredentials = true;
 
 axios.interceptors.request.use(

@@ -108,9 +108,10 @@ export default {
 			rightDrawer: false
 		};
 	},
-	mounted() {
+	created() {
 		this.initializeSidebar();
 		this.$store.dispatch("refreshToken");
+		this.routerInitialize();
 	},
 	methods: {
 		initializeSidebar() {
@@ -118,8 +119,9 @@ export default {
 		},
 
 		async routerInitialize() {
-			this.$router.beforeEach(() => {
+			this.$router.beforeEach(async (to, from, next) => {
 				this.$Progress.start();
+				return this.$store.dispatch('checkRoute', {to, next})
 			});
 			this.$router.afterEach(() => {
 				this.$Progress.finish();

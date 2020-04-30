@@ -2,29 +2,30 @@ import Vue from "vue";
 import Vuex from "vuex";
 import router from "../router/index";
 import cookies from "js-cookie";
+import roles from "../views/backend/system-admin/roles/store";
+import permissions from "../views/backend/system-admin/permissions/store";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-	state: {
-		token: null,
-		user: null,
-		refreshing: null,
-		roles: []
-	},
+    modules: {
+        roles, permissions
+        // other modules here ...
+    },
+    state: {
+        token: null,
+        user: null,
+        refreshing: null,
+    },
 
-	getters: {
-		getToken(state) {
-			return state.token;
-		},
+    getters: {
+        getToken(state) {
+            return state.token;
+        },
 
 		refreshingStatus(state) {
 			return state.refreshing;
 		},
-
-		getRoles(state) {
-			return state.roles;
-		}
 	},
 
 	mutations: {
@@ -34,10 +35,6 @@ export default new Vuex.Store({
 
 		SET_REFRESHING_TOKEN(state, status) {
 			state.refreshing = status;
-		},
-
-		SET_ROLES(state, roles) {
-			state.roles = roles;
 		},
 
 		REMOVE_TOKEN(state) {
@@ -60,32 +57,42 @@ export default new Vuex.Store({
 		},
 
 		async refreshToken({dispatch, commit}, redirectTo = null) {
+
 			if (redirectTo === null) {
 				commit("SET_REFRESHING_TOKEN", true);
 			}
 
 			this._vm.$axios.post("/refresh-token").then(({data}) => {
-				const {token, expiresIn} = data;
-				dispatch("setToken", {token, expiresIn});
+                const {token, expiresIn} = data;
+                dispatch("setToken", {token, expiresIn});
 
-				if (redirectTo !== null) {
-					router.push({name: redirectTo});
-				}
-			}).catch(() => {
-				if (redirectTo === null) {
-					commit("SET_REFRESHING_TOKEN", false);
-				}
-			});
-		},
+                if (window.location.pathname === '/login') {
+                    router.push({name: 'secret'})
+                }
 
-		checkRoute({dispatch}, {to, next, initial = false}) {
-			const token = cookies.get('x-access-token');
-			if (to.meta.auth === 'middle' && token !== undefined) {
-				return next({name: 'secret'});
-			} else if (to.meta.auth === true && token === undefined) {
-				if (initial) return next({name: 'login'});
-				else return dispatch('refreshToken', to.name);
-			} else {
+                if (redirectTo !== null) {
+                    router.push({name: redirectTo});
+                }
+            }).catch(() => {
+                if (redirectTo === null) {
+                    commit("SET_REFRESHING_TOKEN", false);
+                }
+            });
+        },
+
+        async checkRoute({dispatch, getters}, {to, next, initial = false}) {
+            const token = cookies.get('x-access-token');
+            if (to.meta.auth === 'middle' && token !== undefined) {
+                return next({name: 'secret'});
+            } else if (to.meta.auth === true && token === undefined) {
+                await dispatch('refreshToken');
+                if (getters.getToken) {
+                    if (initial) return next(to);
+                    else return next();
+                } else {
+                    return next({name: 'login'})
+                }
+            } else {
 				if (initial) return next(to);
 				else return next();
 			}
