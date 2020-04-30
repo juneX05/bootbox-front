@@ -3,18 +3,18 @@
         <v-form v-model="valid">
             <v-card>
                 <v-row align="center" justify="center">
-                    <v-card-title>Edit Permission</v-card-title>
+                    <v-card-title>Edit FileType</v-card-title>
                 </v-row>
                 <v-divider/>
                 <v-col cols="12">
-                    <data-form :form=" form " :permissions="permissions"></data-form>
+                    <data-form :form=" form "></data-form>
                 </v-col>
                 <v-divider/>
                 <v-card-actions>
                     <v-row align="center" justify="center">
                         <v-btn :disabled="!valid" :loading="loading" @click="update" color="primary">
                             <v-icon>mdi-lock-edit</v-icon>
-                            Update Permission
+                            Update FileType
                         </v-btn>
                     </v-row>
                 </v-card-actions>
@@ -27,16 +27,19 @@
     import DataForm from "./DataForm";
 
     export default {
-        name: 'PermissionEdit',
+        name: 'FileTypeEdit',
         components: {DataForm},
         props: ['id'],
         computed: {
             loading() {
-                return this.$store.getters.getPermissionLoadingStatus
+                return this.$store.getters.getFileTypeLoadingStatus
             },
             form: {
                 get() {
-                    return this.$store.getters.getPermission
+                    if (this.$store.getters.getFileType === undefined) {
+                        return {name: '', description: ''}
+                    }
+                    return this.$store.getters.getFileType
                 },
                 set(value) {
                     return value
@@ -46,17 +49,16 @@
         data() {
             return {
                 valid: false,
-                permission: {name: '', description: ''}
+                fileType: {name: '', description: ''}
             }
         },
         created() {
-            this.$store.dispatch('loader', 'loadPermissions');
-            this.$store.dispatch('loader', {action: 'getPermission', payload: this.id});
+            this.$store.dispatch('loader', {action: 'getFileType', payload: this.id});
         },
         methods: {
             update() {
                 this.$store.dispatch('loader', {
-                    action: 'updatePermission',
+                    action: 'updateFileType',
                     payload: {id: this.id, formInput: this.form}
                 });
             },

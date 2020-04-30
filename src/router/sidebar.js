@@ -1,5 +1,6 @@
 import roles_routes from "../views/backend/system-admin/roles/routes";
 import permissions_routes from "../views/backend/system-admin/permissions/routes";
+import fileTypes_routes from "../views/backend/system-admin/file-types/routes";
 
 const sidebar_routes = [
     {
@@ -12,7 +13,7 @@ const sidebar_routes = [
             icon: "lock-clock"
         }
     },
-    ...roles_routes, ...permissions_routes
+    ...roles_routes, ...permissions_routes, ...fileTypes_routes
 ];
 
 export default sidebar_routes;

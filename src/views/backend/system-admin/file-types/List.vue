@@ -1,20 +1,19 @@
 <template>
     <v-container fluid>
-        <listings :items="roles" :keys="keys" v-slot:default="props">
+        <listings :items="fileTypes" :keys="keys" v-slot:default="props">
             <v-card>
                 <v-card-title class="subheading font-weight-bold">{{ props.item.name }}</v-card-title>
 
                 <v-divider></v-divider>
 
                 <v-card-actions>
-                    <v-btn :to="{name:'role-edit', params:{id:props.item.id}}">Edit</v-btn>
+                    <v-btn :to="{name:'fileTypes-edit', params:{id:props.item.id}}" small>Edit</v-btn>
                     <v-spacer/>
-                    <v-btn :to="{name:'role-show', params:{id:props.item.id}}">Describe</v-btn>
+                    <v-btn :to="{name:'fileTypes-show', params:{id:props.item.id}}" small>More...</v-btn>
                     <v-spacer/>
-                    <v-btn @click.prevent="deleteRole()" v-if="props.item.id === item.id">Confirm</v-btn>
-                    <v-btn @click.prevent="prepareDelete(props.item)" v-else>Delete</v-btn>
+                    <v-btn @click.prevent="confirmDelete()" small v-if="props.item.id === item.id">Confirm</v-btn>
+                    <v-btn @click.prevent="prepareDelete(props.item)" small v-else>Delete</v-btn>
                 </v-card-actions>
-
             </v-card>
         </listings>
     </v-container>
@@ -24,7 +23,7 @@
     import Listings from "../../../../components/Listings";
 
     export default {
-        name: 'RolesList',
+        name: 'FileTypesList',
         components: {Listings},
         data() {
             return {
@@ -35,19 +34,22 @@
             }
         },
         computed: {
-            roles() {
-                return this.$store.getters.getAllRoles;
+            fileTypes() {
+                return this.$store.getters.getFileTypes;
             },
         },
         created() {
-            this.$store.dispatch('loader', 'loadRoles');
+            this.$store.dispatch('loader', 'loadFileTypes');
         },
         methods: {
             prepareDelete(item) {
                 this.item = item;
             },
-            deleteRole() {
-                this.$store.dispatch('deleteRole', this.item.id);
+            confirmDelete() {
+                this.$store.dispatch('loader', {
+                    payload: this.item.id,
+                    action: 'deleteFileType'
+                });
             },
         },
     }
