@@ -40,8 +40,11 @@
 					</template>
 
 					<template v-for="(child,index) in item.children">
-						<v-list-item :exact="child.meta.exact" :key=" 'child' + index " :to="child.path" link
-									 v-if="!child.props">
+						<v-list-item
+								:exact="child.meta.exact"
+								:key=" 'child' + index "
+								:to="child.path" link
+								v-if="!child.props">
 							<v-list-item-icon>
 								<v-icon>mdi-{{child.meta.icon}}</v-icon>
 							</v-list-item-icon>
