@@ -1,5 +1,5 @@
 <template>
-    <v-select :item-text="item_text" :items="items"
+    <v-select :item-text="item_text" :items="items" :rules="rules"
               :label="label" :menu-props="{closeOnContentClick:true}" chips
               dense multiple outlined return-object small-chips v-model="selections">
         <template v-slot:prepend-item>
@@ -22,6 +22,11 @@
         props: {
             value: {default: ''},
             items: {type: Array, required: true},
+            rules: {
+                type: Array, default: function () {
+                    return []
+                }
+            },
             item_text: {type: String, required: true},
             label: {type: String, default: 'Enter Date'},
             required: {type: Boolean, default: false}
