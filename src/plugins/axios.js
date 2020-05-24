@@ -5,7 +5,7 @@ import app from "../main";
 import cookies from "js-cookie";
 
 //axios instance
-axios.defaults.baseURL = "https://hy-api.herokuapp.com/api";
+axios.defaults.baseURL = process.env.VUE_APP_API_URL;
 axios.defaults.withCredentials = true;
 
 axios.interceptors.request.use(

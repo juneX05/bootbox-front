@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d0e93c0"],{"8d53":function(e,t,r){"use strict";r.r(t);var s=function(){var e=this,t=e.$createElement,r=e._self._c||t;return r("h1",[e._v("Welcome to the secret page.")])},n=[],o={name:"secret",data(){return{}},created(){this.$store.dispatch("loader","loadRoles")},computed:{roles(){return this.$store.getters.getRoles}}},c=o,a=r("2877"),l=Object(a["a"])(c,s,n,!1,null,null,null);t["default"]=l.exports}}]);
+//# sourceMappingURL=chunk-2d0e93c0.6a20e782.js.map
