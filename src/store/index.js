@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import router from "../router/index";
 import cookies from "js-cookie";
+import axios from "axios";
 
 Vue.use(Vuex);
 
@@ -99,7 +100,7 @@ export default new Vuex.Store({
 		},
 
 		async login({dispatch}, data) {
-			await this._vm.$axios.post("/login", data).then(({data}) => {
+			await axios.post("/login", data).then(({data}) => {
 				const {token, expiresIn} = data;
 				dispatch("setToken", {token, expiresIn});
 				router.push({name: "secret"});
