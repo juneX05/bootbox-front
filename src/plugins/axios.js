@@ -6,7 +6,7 @@ import cookies from "js-cookie";
 
 //axios instance
 // axios.defaults.baseURL = "https://hy-api.herokuapp.com/api";
-axios.defaults.baseURL = "http://bootbox-api.local/api";
+axios.defaults.baseURL = process.env.VUE_APP_API_URL;
 axios.defaults.withCredentials = true;
 
 axios.interceptors.request.use(
@@ -39,7 +39,7 @@ axios.interceptors.response.use(
         const originalRequest = error.config;
         if (
             error.response.status === 401 &&
-            originalRequest.url === "/refresh-token"
+            originalRequest.url === process.env.VUE_APP_REFRESH_TOKEN_API_URL
         ) {
             router.push("/login");
             return Promise.reject(error);
@@ -47,7 +47,7 @@ axios.interceptors.response.use(
 
         if (error.response.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
-            return axios.post('refresh-token')
+            return axios.post(process.env.VUE_APP_REFRESH_TOKEN_API_URL)
                 .then(({status, data}) => {
                     if (status === 200) {
                         store.dispatch('setToken', data);

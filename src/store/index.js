@@ -57,52 +57,19 @@ export default new Vuex.Store({
 			commit("SET_REFRESHING_TOKEN", false);
 		},
 
-		async refreshToken({dispatch, commit}, redirectTo = null) {
+		async refreshToken({dispatch, commit}) {
 
-			if (redirectTo === null) {
-				commit("SET_REFRESHING_TOKEN", true);
-			}
+			commit("SET_REFRESHING_TOKEN", true);
 
-			this._vm.$axios.post("/refresh-token").then(({data}) => {
-                const {token, expiresIn} = data;
-                dispatch("setToken", {token, expiresIn});
+			this._vm.$axios.post(process.env.VUE_APP_REFRESH_TOKEN_API_URL).then(({data}) => {
+				const {token, expiresIn} = data;
+				dispatch("setToken", {token, expiresIn});
 
-                if (window.location.pathname === '/login') {
-                    router.push({name: 'secret'})
-                }
-
-                if (redirectTo !== null) {
-                    router.push({name: redirectTo});
-                }
-            }).catch(() => {
-                if (redirectTo === null) {
-                    commit("SET_REFRESHING_TOKEN", false);
-                }
-            });
-        },
-
-        async checkRoute({dispatch, getters}, {to, next, initial = false}) {
-            const token = cookies.get('x-access-token');
-            if (to.meta.auth === 'middle' && token !== undefined) {
-                return next({name: 'secret'});
-            } else if (to.meta.auth === true && token === undefined) {
-                await dispatch('refreshToken');
-                if (getters.getToken) {
-                    if (initial) return next(to);
-                    else return next();
-                } else {
-                    return next({name: 'login'})
-                }
-            } else {
-				if (initial) return next(to);
-				else return next();
-			}
-		},
-
-		async loadRoles({commit}) {
-			await this._vm.$axios.get("/roles").then(({data}) => {
-				const roles = data.data;
-				commit("SET_ROLES", roles);
+				if (window.location.pathname === '/login') {
+					router.push({name: 'secret'})
+				}
+			}).catch(() => {
+				commit("SET_REFRESHING_TOKEN", false);
 			});
 		},
 

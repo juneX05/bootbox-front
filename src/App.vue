@@ -111,21 +111,10 @@ export default {
 	created() {
 		this.initializeSidebar();
 		this.$store.dispatch("refreshToken");
-		this.routerInitialize();
 	},
 	methods: {
 		initializeSidebar() {
 			this.open = this.$vuetify.breakpoint.mdAndUp;
-		},
-
-		async routerInitialize() {
-			this.$router.beforeEach(async (to, from, next) => {
-				this.$Progress.start();
-				return this.$store.dispatch('checkRoute', {to, next})
-			});
-			this.$router.afterEach(() => {
-				this.$Progress.finish();
-			})
 		},
 	},
 	computed: {

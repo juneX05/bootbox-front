@@ -9,5 +9,9 @@
 	align-self: center;
 }
 .v-application a {
-	color: #fcfcfc !important;
+    color: #fcfcfc !important;
+}
+
+html {
+    overflow: auto
 }
