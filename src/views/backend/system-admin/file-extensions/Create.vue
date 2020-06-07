@@ -41,7 +41,7 @@
         data() {
             return {
                 valid: false,
-                form: {extension: '', extension_icon: '', file_type: null},
+                form: {icon: '', extension: '', file_type: null},
             }
         },
         created() {

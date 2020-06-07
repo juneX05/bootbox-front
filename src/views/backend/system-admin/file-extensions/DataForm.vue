@@ -2,15 +2,15 @@
     <v-row align-center justify-center>
         <v-col cols="12">
             <v-select :items="file_types" :menu-props="{closeOnContentClick:true}"
-                      :rules="[required('File Type')]"
+                      :rules="[requiredSelect('File Type')]"
                       chips dense item-text="name"
                       label="FileTypes" outlined return-object small-chips v-model="form.file_type">
             </v-select>
         </v-col>
         <v-col cols="12">
             <v-text-field
-                    :rules="[required('File Extension')]" dense
-                    label="File Extension"
+                    :rules="[required('Extension Name')]" dense
+                    label="File Extension (without the preceding dot)"
                     outlined
                     v-model="form.extension"
             ></v-text-field>

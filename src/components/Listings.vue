@@ -66,7 +66,7 @@
         </template>
 
         <template v-slot:default="props">
-            <v-row>
+            <v-row v-if="props.items.length > 0">
                 <v-col :key=" 'items'+index " :lg="lg" :md="md" :sm="sm" cols="12" v-for="(item,index) in props.items">
                     <slot v-bind:item="item"></slot>
                 </v-col>

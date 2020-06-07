@@ -77,6 +77,7 @@ const fileTypes = {
                     commit("UPDATE_FILE_TYPE", {id, formInput})
                     router.push({name: 'fileTypes-list'})
                 })
+            commit("SET_FILE_TYPE", {});
         },
 
         async getFileType({commit}, id) {

@@ -7,17 +7,22 @@ let minLength = (propertyType, minLength) => {
 };
 
 let maxLength = (propertyType, maxLength) => {
-  return v => v && v.length <= maxLength || `${propertyType} must be less than ${maxLength} characters`
+    return v => v && v.length <= maxLength || `${propertyType} must be less than ${maxLength} characters`
 };
 
 let emailFormat = () => {
-  let regex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,24})+$/;
-  return v => v && regex.test(v) || "Must be a valid email"
+    let regex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,24})+$/;
+    return v => v && regex.test(v) || "Must be a valid email"
 };
 
+let requiredSelect = (propertyType) => {
+    return v => v && typeof v === "object" || `Please select a ${propertyType}`
+}
+
 export default {
-  required,
-  minLength,
-  maxLength,
-  emailFormat
+    required,
+    minLength,
+    maxLength,
+    emailFormat,
+    requiredSelect
 } 

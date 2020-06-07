@@ -8,10 +8,10 @@
                         <b>Extension</b> : {{form.extension}}
                     </v-list-item>
                     <v-list-item>
-                        <b>Icon</b> : {{form.extension_icon}}
+                        <b>Icon</b> : {{form.icon}}
                     </v-list-item>
                     <v-list-item>
-                        <b>File Types</b> : {{form.file_type}}
+                        <b>File Type</b> : {{form.file_type.name}}
                     </v-list-item>
                 </v-card-text>
             </v-card>
@@ -30,7 +30,7 @@
             form: {
                 get() {
                     if (this.$store.getters.getFileExtension === undefined) {
-                        return {extension: '', extension_icon: '', file_type: null}
+                        return {extension: '', icon: '', file_type: null}
                     }
                     return this.$store.getters.getFileExtension
                 },

@@ -77,6 +77,7 @@ const roles = {
                     commit("UPDATE_ROLE", {id, formInput})
                     router.push({name: 'roles-list'})
                 })
+            commit("SET_ROLE", {});
         },
 
         async getRole({commit}, id) {

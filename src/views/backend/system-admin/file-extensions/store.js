@@ -77,6 +77,7 @@ const fileExtensions = {
                     commit("UPDATE_FILE_EXTENSION", {id, formInput})
                     router.push({name: 'fileExtensions-list'})
                 })
+            commit("SET_FILE_EXTENSION", {});
         },
 
         async getFileExtension({commit}, id) {

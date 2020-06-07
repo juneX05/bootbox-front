@@ -22,6 +22,15 @@ Vue.use(VueProgressBar, {
 	thickness: '5px',
 });
 
+Vue.mixin({
+	methods: {
+		//Temporary Fix due to inability of button links to switch to dark mode
+		goTo(route_name, route_params) {
+			this.$router.push({name: route_name, params: route_params})
+		}
+	}
+})
+
 /* eslint-disable no-new */
 export default new Vue({
 	vuetify,

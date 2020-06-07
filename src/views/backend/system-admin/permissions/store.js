@@ -77,6 +77,7 @@ const permissions = {
                     commit("UPDATE_PERMISSION", {id, formInput})
                     router.push({name: 'permissions-list'})
                 })
+            commit("SET_PERMISSION", {});
         },
 
         async getPermission({commit}, id) {

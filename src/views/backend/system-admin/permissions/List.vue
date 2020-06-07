@@ -7,9 +7,9 @@
                 <v-divider></v-divider>
 
                 <v-card-actions>
-                    <v-btn :to="{name:'permissions-edit', params:{id:props.item.id}}" small>Edit</v-btn>
+                    <v-btn @click="goTo('permissions-edit',{id:props.item.id})" small>Edit</v-btn>
                     <v-spacer/>
-                    <v-btn :to="{name:'permissions-show', params:{id:props.item.id}}" small>More...</v-btn>
+                    <v-btn @click="goTo('permissions-show', {id:props.item.id})" small>More...</v-btn>
                     <v-spacer/>
                     <v-btn @click.prevent="confirmDelete()" small v-if="props.item.id === item.id">Confirm</v-btn>
                     <v-btn @click.prevent="prepareDelete(props.item)" small v-else>Delete</v-btn>
