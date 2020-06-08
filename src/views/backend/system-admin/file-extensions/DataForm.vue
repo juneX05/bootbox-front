@@ -1,11 +1,12 @@
 <template>
     <v-row align-center justify-center>
         <v-col cols="12">
-            <v-select :items="file_types" :menu-props="{closeOnContentClick:true}"
-                      :rules="[requiredSelect('File Type')]"
-                      chips dense item-text="name"
-                      label="FileTypes" outlined return-object small-chips v-model="form.file_type">
-            </v-select>
+            <v-text-field
+                    :rules="[required('Mime Type')]" dense
+                    label="Enter the full mime type (xxxxx/xxxx)"
+                    outlined
+                    v-model="form.mime_type"
+            ></v-text-field>
         </v-col>
         <v-col cols="12">
             <v-text-field
@@ -32,7 +33,6 @@
         name: 'DataForm',
         props: {
             form: {type: Object, required: true},
-            file_types: {type: Array, required: true}
         },
         data() {
             return {

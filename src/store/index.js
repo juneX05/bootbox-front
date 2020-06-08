@@ -4,14 +4,15 @@ import router from "../router/index";
 import cookies from "js-cookie";
 import roles from "../views/backend/system-admin/roles/store";
 import permissions from "../views/backend/system-admin/permissions/store";
-import fileTypes from "../views/backend/system-admin/file-types/store";
+// import fileTypes from "../views/backend/system-admin/file-types/store";
 import fileExtensions from "../views/backend/system-admin/file-extensions/store";
+import files from "../views/backend/system-admin/files/store";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
     modules: {
-        roles, permissions, fileTypes, fileExtensions
+        roles, permissions, fileExtensions, files
         // other modules here ...
     },
     state: {

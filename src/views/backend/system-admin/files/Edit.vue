@@ -3,7 +3,7 @@
         <v-form v-model="valid">
             <v-card>
                 <v-row align="center" justify="center">
-                    <v-card-title>Edit FileExtension</v-card-title>
+                    <v-card-title>Edit File</v-card-title>
                 </v-row>
                 <v-divider/>
                 <v-col cols="12">
@@ -14,7 +14,7 @@
                     <v-row align="center" justify="center">
                         <v-btn :disabled="!valid" :loading="loading" @click="update" color="primary">
                             <v-icon>mdi-lock-edit</v-icon>
-                            Update FileExtension
+                            Update File
                         </v-btn>
                     </v-row>
                 </v-card-actions>
@@ -27,16 +27,16 @@
     import DataForm from "./DataForm";
 
     export default {
-        name: 'FileExtensionEdit',
+        name: 'FileEdit',
         components: {DataForm},
         props: ['id'],
         computed: {
             loading() {
-                return this.$store.getters.getFileExtensionLoadingStatus
+                return this.$store.getters.getFileLoadingStatus
             },
             form: {
                 get() {
-                    return this.$store.getters.getFileExtension
+                    return this.$store.getters.getFile
                 },
                 set(value) {
                     return value
@@ -46,16 +46,16 @@
         data() {
             return {
                 valid: false,
-                fileExtension: {name: '', description: ''}
+                file: {name: '', description: '', upload_file: null}
             }
         },
         created() {
-            this.$store.dispatch('loader', {action: 'getFileExtension', payload: this.id});
+            this.$store.dispatch('loader', {action: 'getFile', payload: this.id});
         },
         methods: {
             update() {
                 this.$store.dispatch('loader', {
-                    action: 'updateFileExtension',
+                    action: 'updateFile',
                     payload: {id: this.id, formInput: this.form}
                 });
             },
