@@ -11,6 +11,7 @@ axios.defaults.withCredentials = true;
 
 axios.interceptors.request.use(
     config => {
+        store.state.validation_errors = {}
         app.$Progress.start();
         const token = cookies.get('x-access-token');
         if (token) {

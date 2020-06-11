@@ -7,7 +7,7 @@
                 </v-row>
                 <v-divider/>
                 <v-col cols="12">
-                    <data-form :file_types="file_types" :form=" form "></data-form>
+                    <data-form :form=" form "></data-form>
                 </v-col>
                 <v-divider/>
                 <v-card-actions>
@@ -34,9 +34,6 @@
             loading() {
                 return this.$store.getters.getFileExtensionLoadingStatus
             },
-            file_types() {
-                return this.$store.getters.getFileTypes
-            }
         },
         data() {
             return {
