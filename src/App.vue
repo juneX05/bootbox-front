@@ -88,19 +88,22 @@
 			</v-row>
 		</v-content>
 		<vue-progress-bar></vue-progress-bar>
+		<snackbar></snackbar>
 	</v-app>
 </template>
 <script>
 import sidebar from "./components/sidebar";
 import navbar from "./components/navbar";
 import rightsidebar from "./components/right_sidebar";
+import snackbar from "./components/Snackbar"
 // import cookies from "js-cookie";
 
 export default {
 	components: {
 		sidebar,
 		navbar,
-		rightsidebar
+		rightsidebar,
+		snackbar
 	},
 	data() {
 		return {
@@ -108,22 +111,13 @@ export default {
 			rightDrawer: false
 		};
 	},
-	mounted() {
+	created() {
 		this.initializeSidebar();
 		this.$store.dispatch("refreshToken");
 	},
 	methods: {
 		initializeSidebar() {
 			this.open = this.$vuetify.breakpoint.mdAndUp;
-		},
-
-		async routerInitialize() {
-			this.$router.beforeEach(() => {
-				this.$Progress.start();
-			});
-			this.$router.afterEach(() => {
-				this.$Progress.finish();
-			})
 		},
 	},
 	computed: {

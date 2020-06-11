@@ -1,5 +1,5 @@
 <template>
-	<v-list dense nav>
+	<v-list align="left" dense nav>
 		<template v-if="!$vuetify.breakpoint.mdAndUp">
 			<v-list-item
 					:exact="item.meta.exact"
@@ -31,16 +31,20 @@
 
 				<v-list-group
 						:key=" 'sidebar' + index "
-						prepend-icon="mdi-account"
+						:prepend-icon=" `mdi-${item.meta.icon}` "
 						v-if="item.children"
-						value="true"
+						:value="$route.name.split('-')[0] === item.name"
 				>
 					<template v-slot:activator>
-						<v-list-item-title>Users</v-list-item-title>
+						<v-list-item-title>{{item.meta.title}}</v-list-item-title>
 					</template>
 
-					<template v-for="(children,index) in item.children">
-						<v-list-item :exact="child.meta.exact" :key=" 'child' + index " :to="child.path" link>
+					<template v-for="(child,index) in item.children">
+						<v-list-item
+								:exact="child.meta.exact"
+								:key=" 'child' + index "
+								:to="child.path" link
+								v-if="!child.props">
 							<v-list-item-icon>
 								<v-icon>mdi-{{child.meta.icon}}</v-icon>
 							</v-list-item-icon>
