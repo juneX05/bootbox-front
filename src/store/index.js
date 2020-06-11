@@ -18,6 +18,11 @@ export default new Vuex.Store({
         token: null,
         user: null,
         refreshing: null,
+        snackbar: {
+            show: false,
+            text: 'Default message',
+            color: 'success'
+        }
     },
 
     getters: {
@@ -25,85 +30,123 @@ export default new Vuex.Store({
             return state.token;
         },
 
-		refreshingStatus(state) {
-			return state.refreshing;
-		},
-	},
+        refreshingStatus(state) {
+            return state.refreshing;
+        },
 
-	mutations: {
-		SET_TOKEN(state, token) {
-			state.token = token;
-		},
+        getUser(state) {
+            return state.user;
+        }
+    },
 
-		SET_REFRESHING_TOKEN(state, status) {
-			state.refreshing = status;
-		},
+    mutations: {
+        SET_TOKEN(state, token) {
+            state.token = token;
+        },
 
-		REMOVE_TOKEN(state) {
-			state.token = null;
-		}
-	},
+        SET_REFRESHING_TOKEN(state, status) {
+            state.refreshing = status;
+        },
 
-	actions: {
-		async setToken({commit}, {token, expiresIn}) {
-			const expiryTime = new Date(
-				new Date().getTime() + expiresIn * 1000
-			);
-			cookies.set("x-access-token", token, {
-				expires: expiryTime
-			});
-			this._vm.$axios.defaults.headers.common.Authorization =
-				"Bearer " + token;
-			commit("SET_TOKEN", token);
-			commit("SET_REFRESHING_TOKEN", false);
-		},
+        REMOVE_TOKEN(state) {
+            state.token = null;
+        },
 
-		async refreshToken({dispatch, commit}) {
+        SET_SNACKBAR(state, snackbar) {
+            state.snackbar = snackbar
+        },
 
-			commit("SET_REFRESHING_TOKEN", true);
+        SET_USER(state, user) {
+            state.user = user
+        }
+    },
 
-			this._vm.$axios.post(process.env.VUE_APP_REFRESH_TOKEN_API_URL).then(({data}) => {
-				const {token, expiresIn} = data;
-				dispatch("setToken", {token, expiresIn});
+    actions: {
+        async setToken({commit}, {token, expiresIn}) {
+            const expiryTime = new Date(
+                new Date().getTime() + expiresIn * 1000
+            );
+            cookies.set("x-access-token", token, {
+                expires: expiryTime
+            });
+            commit("SET_TOKEN", token);
+            commit("SET_REFRESHING_TOKEN", false);
+        },
 
-				if (window.location.pathname === '/login') {
-					router.push({name: 'secret'})
-				}
-			}).catch(() => {
-				commit("SET_REFRESHING_TOKEN", false);
-			});
-		},
+        async refreshToken({dispatch, getters}) {
 
-		async login({dispatch}, data) {
-			await this._vm.$axios.post("/login", data).then(({data}) => {
-				const {token, expiresIn} = data;
-				dispatch("setToken", {token, expiresIn});
-				router.push({name: "secret"});
-			});
-		},
+            // commit("SET_REFRESHING_TOKEN", true);
 
-		logout({ commit }) {
-			cookies.remove("x-access-token");
-			commit("REMOVE_TOKEN");
-			router.push({name: 'home'});
-		},
+            this._vm.$axios.post(process.env.VUE_APP_REFRESH_TOKEN_API_URL).then(async ({data}) => {
+                const {token, expiresIn} = data;
+                dispatch("setToken", {token, expiresIn});
 
-		loader({ dispatch, getters }, data) {
-			let id = setInterval(checker, 1000);
-			function checker() {
-				if (!getters.refreshingStatus) {
-					clearInterval(id);
-					if ([null, undefined].includes(getters.getToken))
-						return;
+                if (!getters.getUser) {
+                    await dispatch("getUser");
+                }
 
-					if (typeof data === "object") {
-						const {action, payload} = data;
-						dispatch(action, payload);
-					} else {
-						dispatch(data);
-					}
-				}
-			}
-		}
-	}
+                if (window.location.pathname === '/login') {
+                    await router.push({name: 'secret'})
+                }
+            }).catch(() => {
+                if (window.location.pathname !== '/login') {
+                    router.push({name: 'login'})
+                }
+            });
+        },
+
+        async getUser({commit}) {
+
+            // commit("SET_REFRESHING_TOKEN", true);
+
+            await this._vm.$axios.get(process.env.VUE_APP_CURRENT_USER_API_URL).then(({data}) => {
+
+                commit("SET_USER", data);
+
+                commit("SET_SNACKBAR", {
+                    show: true, text: "Welcome back " + data.name, color: 'success'
+                });
+            }).catch(() => {
+                // commit("SET_REFRESHING_TOKEN", false);
+            });
+        },
+
+        async login({dispatch, commit}, data) {
+            await this._vm.$axios.post(process.env.VUE_APP_LOGIN_API_URL, data).then(async ({data}) => {
+                const {token, expiresIn} = data;
+                dispatch("setToken", {token, expiresIn});
+                await dispatch("getUser");
+                await router.push({name: "secret"});
+            }).catch((error) => {
+                commit("SET_SNACKBAR", {
+                    show: true, text: error.response.data.message, color: 'error'
+                })
+            });
+        },
+
+        logout({commit}) {
+            cookies.remove("x-access-token");
+            commit("REMOVE_TOKEN");
+            router.push({name: 'home'});
+        },
+
+        loader({dispatch, getters}, data) {
+            let id = setInterval(checker, 1000);
+
+            function checker() {
+                if (!getters.refreshingStatus) {
+                    clearInterval(id);
+                    if ([null, undefined].includes(getters.getToken))
+                        return;
+
+                    if (typeof data === "object") {
+                        const {action, payload} = data;
+                        dispatch(action, payload);
+                    } else {
+                        dispatch(data);
+                    }
+                }
+            }
+        }
+    }
 });
