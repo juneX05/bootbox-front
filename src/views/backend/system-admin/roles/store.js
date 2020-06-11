@@ -67,6 +67,16 @@ const roles = {
             await this._vm.$axios.post('/roles', formInput).then(() => {
                 commit("ADD_ROLE", formInput);
                 router.push({name: 'roles-list'})
+                commit("SET_SNACKBAR", {
+                    show: true, color: 'success',
+                    text: 'New Role Added Successfully'
+                });
+            }).catch((error) => {
+                commit("SET_VALIDATION_ERRORS", error.response.data.errors);
+                commit("SET_SNACKBAR", {
+                    show: true, color: 'error',
+                    text: error.response.data.message
+                });
             })
             commit("SET_LOADING", false);
         },
@@ -76,8 +86,18 @@ const roles = {
                 .then(() => {
                     commit("UPDATE_ROLE", {id, formInput})
                     router.push({name: 'roles-list'})
+                    commit("SET_ROLE", {});
+                    commit("SET_SNACKBAR", {
+                        show: true, color: 'success',
+                        text: 'Role Updated Successfully'
+                    });
+                }).catch((error) => {
+                    commit("SET_VALIDATION_ERRORS", error.response.data.errors);
+                    commit("SET_SNACKBAR", {
+                        show: true, color: 'error',
+                        text: error.response.data.message
+                    });
                 })
-            commit("SET_ROLE", {});
         },
 
         async getRole({commit}, id) {
@@ -91,6 +111,10 @@ const roles = {
             await this._vm.$axios.delete('/roles/' + id)
                 .then(() => {
                     commit("DELETE_ROLE", id)
+                    commit("SET_SNACKBAR", {
+                        show: true, color: 'success',
+                        text: 'Role Removed Successfully'
+                    });
                 })
         }
     }

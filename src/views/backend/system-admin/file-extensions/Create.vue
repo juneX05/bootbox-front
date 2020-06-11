@@ -42,7 +42,6 @@
             }
         },
         created() {
-            this.$store.dispatch('loader', 'loadFileTypes');
         },
         methods: {
             add() {

@@ -67,6 +67,16 @@ const permissions = {
             await this._vm.$axios.post('/permissions', formInput).then(() => {
                 commit("ADD_PERMISSION", formInput);
                 router.push({name: 'permissions-list'})
+                commit("SET_SNACKBAR", {
+                    show: true, color: 'success',
+                    text: 'New Permission Added Successfully'
+                });
+            }).catch((error) => {
+                commit("SET_VALIDATION_ERRORS", error.response.data.errors);
+                commit("SET_SNACKBAR", {
+                    show: true, color: 'error',
+                    text: error.response.data.message
+                });
             })
             commit("SET_LOADING", false);
         },
@@ -76,8 +86,18 @@ const permissions = {
                 .then(() => {
                     commit("UPDATE_PERMISSION", {id, formInput})
                     router.push({name: 'permissions-list'})
+                    commit("SET_PERMISSION", {});
+                    commit("SET_SNACKBAR", {
+                        show: true, color: 'success',
+                        text: 'Permission Updated Successfully'
+                    });
+                }).catch((error) => {
+                    commit("SET_VALIDATION_ERRORS", error.response.data.errors);
+                    commit("SET_SNACKBAR", {
+                        show: true, color: 'error',
+                        text: error.response.data.message
+                    });
                 })
-            commit("SET_PERMISSION", {});
         },
 
         async getPermission({commit}, id) {
@@ -91,6 +111,10 @@ const permissions = {
             await this._vm.$axios.delete('/permissions/' + id)
                 .then(() => {
                     commit("DELETE_PERMISSION", id)
+                    commit("SET_SNACKBAR", {
+                        show: true, color: 'success',
+                        text: 'Permission Deleted Successfully'
+                    });
                 })
         }
     }

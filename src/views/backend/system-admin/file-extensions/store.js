@@ -67,6 +67,12 @@ const fileExtensions = {
             await this._vm.$axios.post('/fileExtensions', formInput).then(() => {
                 commit("ADD_FILE_EXTENSION", formInput);
                 router.push({name: 'fileExtensions-list'})
+                commit("SET_SNACKBAR", {
+                    show: true, color: 'success',
+                    text: 'New File Extension Added Successfully'
+                });
+            }).catch((error) => {
+                commit("SET_VALIDATION_ERRORS", error.response.data.errors);
             })
             commit("SET_LOADING", false);
         },
@@ -76,8 +82,18 @@ const fileExtensions = {
                 .then(() => {
                     commit("UPDATE_FILE_EXTENSION", {id, formInput})
                     router.push({name: 'fileExtensions-list'})
+                    commit("SET_FILE_EXTENSION", {});
+                    commit("SET_SNACKBAR", {
+                        show: true, color: 'success',
+                        text: 'File Extension Updated Successfully'
+                    });
+                }).catch((error) => {
+                    commit("SET_VALIDATION_ERRORS", error.response.data.errors);
+                    commit("SET_SNACKBAR", {
+                        show: true, color: 'error',
+                        text: error.response.data.message
+                    });
                 })
-            commit("SET_FILE_EXTENSION", {});
         },
 
         async getFileExtension({commit}, id) {
@@ -91,6 +107,10 @@ const fileExtensions = {
             await this._vm.$axios.delete('/fileExtensions/' + id)
                 .then(() => {
                     commit("DELETE_FILE_EXTENSION", id)
+                    commit("SET_SNACKBAR", {
+                        show: true, color: 'success',
+                        text: 'File Extension Deleted Successfully'
+                    });
                 })
         }
     }

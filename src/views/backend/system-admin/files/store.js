@@ -67,6 +67,16 @@ const files = {
             await this._vm.$axios.post('/files', formInput).then(() => {
                 commit("ADD_FILE", formInput);
                 router.push({name: 'files-list'})
+                commit("SET_SNACKBAR", {
+                    show: true, color: 'success',
+                    text: 'File Added Successfully'
+                });
+            }).catch((error) => {
+                commit("SET_VALIDATION_ERRORS", error.response.data.errors);
+                commit("SET_SNACKBAR", {
+                    show: true, color: 'error',
+                    text: error.response.data.message
+                });
             })
             commit("SET_LOADING", false);
         },
@@ -76,8 +86,18 @@ const files = {
                 .then(() => {
                     commit("UPDATE_FILE", {id, formInput})
                     router.push({name: 'files-list'})
+                    commit("SET_FILE", {});
+                    commit("SET_SNACKBAR", {
+                        show: true, color: 'success',
+                        text: 'File Updated Successfully'
+                    });
+                }).catch((error) => {
+                    commit("SET_VALIDATION_ERRORS", error.response.data.errors);
+                    commit("SET_SNACKBAR", {
+                        show: true, color: 'error',
+                        text: error.response.data.message
+                    });
                 })
-            commit("SET_FILE", {});
         },
 
         async getFile({commit}, id) {
@@ -91,6 +111,10 @@ const files = {
             await this._vm.$axios.delete('/files/' + id)
                 .then(() => {
                     commit("DELETE_FILE", id)
+                    commit("SET_SNACKBAR", {
+                        show: true, color: 'success',
+                        text: 'File Deleted Successfully'
+                    });
                 })
         }
     }

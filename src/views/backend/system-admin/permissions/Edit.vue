@@ -36,9 +36,6 @@
             },
             form: {
                 get() {
-                    if (this.$store.getters.getPermission === undefined) {
-                        return {name: '', description: ''}
-                    }
                     return this.$store.getters.getPermission
                 },
                 set(value) {

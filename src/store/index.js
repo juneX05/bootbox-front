@@ -22,7 +22,8 @@ export default new Vuex.Store({
             show: false,
             text: 'Default message',
             color: 'success'
-        }
+        },
+        validation_errors: {},
     },
 
     getters: {
@@ -58,6 +59,15 @@ export default new Vuex.Store({
 
         SET_USER(state, user) {
             state.user = user
+        },
+
+        SET_VALIDATION_ERRORS(state, errors) {
+            if (Object.keys(errors) > 0) {
+                Object.keys(errors).forEach((key) => {
+                    errors[key] = errors[key][0]
+                })
+            }
+            state.validation_errors = errors;
         }
     },
 
