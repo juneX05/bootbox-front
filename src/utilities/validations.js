@@ -19,10 +19,22 @@ let requiredSelect = (propertyType) => {
     return v => v && typeof v === "object" || `Please select a ${propertyType}`
 }
 
+let imageSize = (propertyType, edit = false) => {
+    function f(value) {
+        if (!(value instanceof File) && edit) {
+            return true
+        }
+        return value.size < 2000000
+    }
+
+    return value => !value || f(value) || `${propertyType} size should be less than 2 MB!`;
+}
+
 export default {
     required,
     minLength,
     maxLength,
     emailFormat,
-    requiredSelect
+    requiredSelect,
+    imageSize
 } 

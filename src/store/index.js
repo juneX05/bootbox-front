@@ -6,17 +6,18 @@ import roles from "../views/backend/system-admin/roles/store";
 import permissions from "../views/backend/system-admin/permissions/store";
 import fileExtensions from "../views/backend/system-admin/file-extensions/store";
 import files from "../views/backend/system-admin/files/store";
+import users from "../views/backend/system-admin/users/store";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
     modules: {
-        roles, permissions, fileExtensions, files
+        roles, permissions, fileExtensions, files, users
         // other modules here ...
     },
     state: {
         token: null,
-        user: null,
+        current_user: null,
         refreshing: null,
         snackbar: {
             show: false,
@@ -35,8 +36,8 @@ export default new Vuex.Store({
             return state.refreshing;
         },
 
-        getUser(state) {
-            return state.user;
+        getCurrentUser(state) {
+            return state.current_user;
         }
     },
 
@@ -57,8 +58,8 @@ export default new Vuex.Store({
             state.snackbar = snackbar
         },
 
-        SET_USER(state, user) {
-            state.user = user
+        SET_CURRENT_USER(state, current_user) {
+            state.current_user = current_user
         },
 
         SET_VALIDATION_ERRORS(state, errors) {
@@ -91,8 +92,8 @@ export default new Vuex.Store({
                 const {token, expiresIn} = data;
                 dispatch("setToken", {token, expiresIn});
 
-                if (!getters.getUser) {
-                    await dispatch("getUser");
+                if (!getters.getCurrentUser) {
+                    await dispatch("getCurrentUser");
                 }
 
                 if (window.location.pathname === '/login') {
@@ -105,13 +106,13 @@ export default new Vuex.Store({
             });
         },
 
-        async getUser({commit}) {
+        async getCurrentUser({commit}) {
 
             // commit("SET_REFRESHING_TOKEN", true);
 
             await this._vm.$axios.get(process.env.VUE_APP_CURRENT_USER_API_URL).then(({data}) => {
 
-                commit("SET_USER", data);
+                commit("SET_CURRENT_USER", data);
 
                 commit("SET_SNACKBAR", {
                     show: true, text: "Welcome back " + data.name, color: 'success'
@@ -125,7 +126,7 @@ export default new Vuex.Store({
             await this._vm.$axios.post(process.env.VUE_APP_LOGIN_API_URL, data).then(async ({data}) => {
                 const {token, expiresIn} = data;
                 dispatch("setToken", {token, expiresIn});
-                await dispatch("getUser");
+                await dispatch("getCurrentUser");
                 await router.push({name: "secret"});
             }).catch((error) => {
                 commit("SET_SNACKBAR", {
