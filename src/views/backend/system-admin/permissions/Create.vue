@@ -42,7 +42,6 @@
             }
         },
         created() {
-            this.$store.dispatch('loader', 'loadPermissions');
         },
         methods: {
             add() {

@@ -1,15 +1,16 @@
 <template>
 	<v-list dense nav>
 		<template>
-			<v-list-item two-line>
-				<v-list-item-avatar>
-					<img alt="John" src="https://cdn.vuetifyjs.com/images/john.jpg">
+			<v-list-item two-line v-if="current_user">
+				<v-list-item-avatar size="60px">
+					<avatar :name="current_user.name" :profile_picture="current_user.profile_picture"
+							:size="60"></avatar>
 				</v-list-item-avatar>
 
 				<v-list-item-content>
-					<v-list-item-title>John Smith</v-list-item-title>
+					<v-list-item-title>{{current_user.name}}</v-list-item-title>
 					<div>
-						<v-chip small>Admin</v-chip>
+						<v-chip small>{{current_user.role ? current_user.role.name : 'No Role'}}</v-chip>
 					</div>
 				</v-list-item-content>
 			</v-list-item>
@@ -44,7 +45,10 @@
 </template>
 
 <script>
+	import Avatar from "./Avatar";
+
 	export default {
+		components: {Avatar},
 		data() {
 			return {
 				dark: true
@@ -62,6 +66,9 @@
 			},
 			authenticated() {
 				return this.$store.state.token
+			},
+			current_user() {
+				return this.$store.state.current_user;
 			}
 		},
 		methods: {

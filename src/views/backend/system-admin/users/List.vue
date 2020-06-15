@@ -1,21 +1,24 @@
 <template>
     <v-container fluid>
-        <listings :items="files" :keys="keys" v-slot:default="props">
-            <v-card>
-                <v-card-title class="subheading font-weight-bold">{{ props.item.name }}</v-card-title>
-                <v-card-subtitle class="">
-                    <b> Owned By: </b> {{ props.item.user ? props.item.user.name : '' }}
-                </v-card-subtitle>
-                <v-btn :href="`${host_url}/public${props.item.path}`">View File</v-btn>
-                <v-card-subtitle class=""><b> File Type: </b> {{ props.item.file_extension.extension }} file
-                </v-card-subtitle>
+        <listings :items="users" :keys="keys" v-slot:default="props">
+            <v-card class="pt-2 ">
+                <v-row align="center" class="spacer mb-1" justify="space-around" no-gutters>
+                    <v-col cols="4">
+                        <avatar :name="props.item.name" :profile_picture="props.item.profile_picture"></avatar>
+                    </v-col>
+                    <v-col cols="8">
+                        <v-card-title class="subheading font-weight-bold text-break">{{ props.item.name }}
+                        </v-card-title>
+                    </v-col>
+                </v-row>
+
 
                 <v-divider></v-divider>
 
                 <v-card-actions>
-                    <v-btn @click="goTo('files-edit',{id:props.item.id})" small>Rename</v-btn>
+                    <v-btn @click="goTo('users-edit',{id:props.item.id})" small>Edit</v-btn>
                     <v-spacer/>
-                    <v-btn @click="goTo('files-show', {id:props.item.id})" small>More...</v-btn>
+                    <v-btn @click="goTo('users-show', {id:props.item.id})" small>More...</v-btn>
                     <v-spacer/>
                     <v-btn @click.prevent="confirmDelete()" small v-if="props.item.id === item.id">Confirm</v-btn>
                     <v-btn @click.prevent="prepareDelete(props.item)" small v-else>Delete</v-btn>
@@ -27,26 +30,26 @@
 
 <script>
     import Listings from "../../../../components/Listings";
+    import Avatar from "../../../../components/Avatar";
 
     export default {
-        name: 'FilesList',
-        components: {Listings},
+        name: 'UsersList',
+        components: {Avatar, Listings},
         data() {
             return {
                 keys: [
                     'name'
                 ],
                 item: {},
-                host_url: process.env.VUE_APP_API_HOST
             }
         },
         computed: {
-            files() {
-                return this.$store.getters.getFiles;
+            users() {
+                return this.$store.getters.getUsers;
             },
         },
         created() {
-            this.$store.dispatch('loader', 'loadFiles');
+            this.$store.dispatch('loader', 'loadUsers');
         },
         methods: {
             prepareDelete(item) {
@@ -55,7 +58,7 @@
             confirmDelete() {
                 this.$store.dispatch('loader', {
                     payload: this.item.id,
-                    action: 'deleteFile'
+                    action: 'deleteUser'
                 });
             },
         },

@@ -3,18 +3,18 @@
         <v-form v-model="valid">
             <v-card>
                 <v-row align="center" justify="center">
-                    <v-card-title>Edit Role</v-card-title>
+                    <v-card-title>Create User</v-card-title>
                 </v-row>
                 <v-divider/>
                 <v-col cols="12">
-                    <data-form :form=" form " :permissions="permissions"></data-form>
+                    <data-form :form=" form " :permissions="permissions" :roles="roles"></data-form>
                 </v-col>
                 <v-divider/>
                 <v-card-actions>
                     <v-row align="center" justify="center">
-                        <v-btn :disabled="!valid" :loading="loading" @click="update" color="primary">
-                            <v-icon>mdi-lock-edit</v-icon>
-                            Update Role
+                        <v-btn :disabled="!valid" :loading="loading" @click="add" color="primary">
+                            <v-icon>mdi-lock-plus</v-icon>
+                            Add User
                         </v-btn>
                     </v-row>
                 </v-card-actions>
@@ -27,44 +27,36 @@
     import DataForm from "./DataForm";
 
     export default {
-        name: 'RoleEdit',
+        name: 'UserCreate',
         components: {DataForm},
         props: ['id'],
         computed: {
             loading() {
-                return this.$store.getters.getRoleLoadingStatus
+                return this.$store.getters.getUserLoadingStatus
             },
             permissions() {
                 return this.$store.getters.getPermissions
             },
-            form: {
-                get() {
-                    return this.$store.getters.getRole
-                },
-                set(value) {
-                    return value
-                }
+            roles() {
+                return this.$store.getters.getRoles
             }
         },
         data() {
             return {
                 valid: false,
-                role: {name: '', description: ''}
+                form: {name: '', description: '', permissions: []},
             }
         },
         created() {
-            this.$store.commit("SET_ROLE", {});
             this.$store.dispatch('loader', 'loadPermissions');
-            this.$store.dispatch('loader', {action: 'getRole', payload: this.id});
+            this.$store.dispatch('loader', 'loadRoles');
         },
         methods: {
-            update() {
-                this.$store.dispatch('loader', {
-                    action: 'updateRole',
-                    payload: {id: this.id, formInput: this.form}
-                });
+            add() {
+                let formData = this.generateFormData(this.form, ['profile_picture']);
+                this.$store.dispatch('loader', {action: 'addUser', payload: formData});
             },
-        },
+        }
     }
 </script>
 

@@ -15,10 +15,6 @@ const files = {
             return state.file;
         },
 
-        getFileById: (state) => (id) => {
-            return state.allFiles.find(file => file.id === id)
-        },
-
         getFilesCount(state) {
             return state.allFiles.length
         },
@@ -30,15 +26,6 @@ const files = {
     mutations: {
         SET_FILES(state, files) {
             state.allFiles = files;
-        },
-
-        ADD_FILE(state, file) {
-            state.allFiles.push(file);
-        },
-
-        UPDATE_FILE(state, {id, file}) {
-            let index = state.allFiles.findIndex(file => file.id === id);
-            state.allFiles[index] = file;
         },
 
         DELETE_FILE(state, id) {
@@ -63,9 +50,8 @@ const files = {
         },
 
         async addFile({commit}, formInput) {
-            commit("SET_LOADING", true);
+            commit("SET_FILES", []);
             await this._vm.$axios.post('/files', formInput).then(() => {
-                commit("ADD_FILE", formInput);
                 router.push({name: 'files-list'})
                 commit("SET_SNACKBAR", {
                     show: true, color: 'success',
@@ -82,9 +68,9 @@ const files = {
         },
 
         async updateFile({commit}, {id, formInput}) {
+            commit("SET_FILES", []);
             await this._vm.$axios.put('/files/' + id, formInput)
                 .then(() => {
-                    commit("UPDATE_FILE", {id, formInput})
                     router.push({name: 'files-list'})
                     commit("SET_FILE", {});
                     commit("SET_SNACKBAR", {

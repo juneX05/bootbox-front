@@ -28,6 +28,18 @@ Vue.mixin({
         goTo(route_name, route_params) {
             this.$router.push({name: route_name, params: route_params})
         },
+
+        generateFormData(form_data, skipper) {
+            let formData = new FormData();
+            let formKeys = Object.keys(form_data);
+            formKeys.forEach((key) => {
+                if (typeof form_data[key] === 'object' && !skipper.includes(key)) {
+                    form_data[key] = JSON.stringify(form_data[key])
+                }
+                formData.append(key, form_data[key]);
+            });
+            return formData;
+        }
     },
     computed: {
         apiValidationErrors: {

@@ -15,10 +15,6 @@ const fileExtensions = {
             return state.fileExtension;
         },
 
-        getFileExtensionById: (state) => (id) => {
-            return state.allFileExtensions.find(fileExtension => fileExtension.id === id)
-        },
-
         getFileExtensionsCount(state) {
             return state.allFileExtensions.length
         },
@@ -30,15 +26,6 @@ const fileExtensions = {
     mutations: {
         SET_FILE_EXTENSIONS(state, fileExtensions) {
             state.allFileExtensions = fileExtensions;
-        },
-
-        ADD_FILE_EXTENSION(state, fileExtension) {
-            state.allFileExtensions.push(fileExtension);
-        },
-
-        UPDATE_FILE_EXTENSION(state, {id, fileExtension}) {
-            let index = state.allFileExtensions.findIndex(fileExtension => fileExtension.id === id);
-            state.allFileExtensions[index] = fileExtension;
         },
 
         DELETE_FILE_EXTENSION(state, id) {
@@ -63,9 +50,8 @@ const fileExtensions = {
         },
 
         async addFileExtension({commit}, formInput) {
-            commit("SET_LOADING", true);
+            commit("SET_FILE_EXTENSIONS", []);
             await this._vm.$axios.post('/fileExtensions', formInput).then(() => {
-                commit("ADD_FILE_EXTENSION", formInput);
                 router.push({name: 'fileExtensions-list'})
                 commit("SET_SNACKBAR", {
                     show: true, color: 'success',
@@ -78,9 +64,9 @@ const fileExtensions = {
         },
 
         async updateFileExtension({commit}, {id, formInput}) {
+            commit("SET_FILE_EXTENSIONS", []);
             await this._vm.$axios.put('/fileExtensions/' + id, formInput)
                 .then(() => {
-                    commit("UPDATE_FILE_EXTENSION", {id, formInput})
                     router.push({name: 'fileExtensions-list'})
                     commit("SET_FILE_EXTENSION", {});
                     commit("SET_SNACKBAR", {

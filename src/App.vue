@@ -37,12 +37,8 @@
 						<v-list-item-title>Login</v-list-item-title>
 					</v-list-item>
 					<v-list-item @click="rightDrawer = !rightDrawer" v-show="authenticated">
-						<v-avatar>
-							<img
-									alt="John"
-									src="https://cdn.vuetifyjs.com/images/john.jpg"
-							/>
-						</v-avatar>
+						<avatar :name="current_user.name" :profile_picture="current_user.profile_picture" :size="45"
+								v-if="current_user"></avatar>
 					</v-list-item>
 				</v-toolbar-items>
 			</v-app-bar>
@@ -96,10 +92,12 @@ import sidebar from "./components/sidebar";
 import navbar from "./components/navbar";
 import rightsidebar from "./components/right_sidebar";
 import snackbar from "./components/Snackbar"
+import Avatar from "./components/Avatar";
 // import cookies from "js-cookie";
 
 export default {
 	components: {
+		Avatar,
 		sidebar,
 		navbar,
 		rightsidebar,
@@ -134,6 +132,9 @@ export default {
 		},
 		authenticated() {
 			return this.$store.state.token;
+		},
+		current_user() {
+			return this.$store.state.current_user;
 		}
 	}
 };
