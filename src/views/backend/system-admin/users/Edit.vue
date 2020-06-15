@@ -7,6 +7,11 @@
                 </v-row>
                 <v-divider/>
                 <v-col cols="12">
+                    <v-btn @click=" removeProfilePicture "
+                           v-if=" form.profile_picture && Object.keys(form.profile_picture).includes('path') ">
+                        Remove Profile Picture
+                    </v-btn>
+
                     <data-form :form=" form " :permissions="permissions" :roles="roles"></data-form>
                 </v-col>
                 <v-divider/>
@@ -56,6 +61,7 @@
             }
         },
         created() {
+            this.$store.commit('SET_USER', {});
             this.$store.dispatch('loader', 'loadPermissions');
             this.$store.dispatch('loader', 'loadRoles');
             this.$store.dispatch('loader', {action: 'getUser', payload: this.id});
@@ -69,6 +75,13 @@
                     payload: {id: this.id, formInput: formData}
                 });
             },
+
+            removeProfilePicture() {
+                this.$store.dispatch('loader', {
+                    action: 'removeProfilePicture',
+                    payload: {id: this.id}
+                });
+            }
         },
     }
 </script>

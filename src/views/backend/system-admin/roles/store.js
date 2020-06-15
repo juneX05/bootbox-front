@@ -15,10 +15,6 @@ const roles = {
             return state.role;
         },
 
-        getRoleById: (state) => (id) => {
-            return state.allRoles.find(role => role.id === id)
-        },
-
         getRolesCount(state) {
             return state.allRoles.length
         },
@@ -30,15 +26,6 @@ const roles = {
     mutations: {
         SET_ROLES(state, roles) {
             state.allRoles = roles;
-        },
-
-        ADD_ROLE(state, role) {
-            state.allRoles.push(role);
-        },
-
-        UPDATE_ROLE(state, {id, role}) {
-            let index = state.allRoles.findIndex(role => role.id === id);
-            state.allRoles[index] = role;
         },
 
         DELETE_ROLE(state, id) {
@@ -63,9 +50,8 @@ const roles = {
         },
 
         async addRole({commit}, formInput) {
-            commit("SET_LOADING", true);
+            commit("SET_ROLES", []);
             await this._vm.$axios.post('/roles', formInput).then(() => {
-                commit("ADD_ROLE", formInput);
                 router.push({name: 'roles-list'})
                 commit("SET_SNACKBAR", {
                     show: true, color: 'success',
@@ -82,9 +68,9 @@ const roles = {
         },
 
         async updateRole({commit}, {id, formInput}) {
+            commit("SET_ROLES", []);
             await this._vm.$axios.put('/roles/' + id, formInput)
                 .then(() => {
-                    commit("UPDATE_ROLE", {id, formInput})
                     router.push({name: 'roles-list'})
                     commit("SET_ROLE", {});
                     commit("SET_SNACKBAR", {

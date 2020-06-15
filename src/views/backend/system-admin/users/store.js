@@ -15,10 +15,6 @@ const users = {
             return state.user;
         },
 
-        getUserById: (state) => (id) => {
-            return state.allUsers.find(user => user.id === id)
-        },
-
         getUsersCount(state) {
             return state.allUsers.length
         },
@@ -30,15 +26,6 @@ const users = {
     mutations: {
         SET_USERS(state, users) {
             state.allUsers = users;
-        },
-
-        ADD_USER(state, user) {
-            state.allUsers.push(user);
-        },
-
-        UPDATE_USER(state, {id, user}) {
-            let index = state.allUsers.findIndex(user => user.id === id);
-            state.allUsers[index] = user;
         },
 
         DELETE_USER(state, id) {
@@ -63,9 +50,8 @@ const users = {
         },
 
         async addUser({commit}, formInput) {
-            commit("SET_LOADING", true);
+            commit("SET_USERS", []);
             await this._vm.$axios.post('/users', formInput).then(() => {
-                commit("ADD_USER", formInput);
                 router.push({name: 'users-list'})
                 commit("SET_SNACKBAR", {
                     show: true, color: 'success',
@@ -78,13 +64,12 @@ const users = {
                     text: error.response.data.message
                 });
             })
-            commit("SET_LOADING", false);
         },
 
         async updateUser({commit}, {id, formInput}) {
+            commit("SET_USERS", []);
             await this._vm.$axios.post('/users/' + id, formInput)
                 .then(() => {
-                    commit("UPDATE_USER", {id, formInput})
                     router.push({name: 'users-list'})
                     commit("SET_USER", {});
                     commit("SET_SNACKBAR", {
@@ -93,6 +78,23 @@ const users = {
                     });
                 }).catch((error) => {
                     commit("SET_VALIDATION_ERRORS", error.response.data.errors);
+                    commit("SET_SNACKBAR", {
+                        show: true, color: 'error',
+                        text: error.response.data.message
+                    });
+                })
+        },
+
+        async removeProfilePicture({commit}, {id}) {
+            await this._vm.$axios.post('/users/remove/profile_picture', {user_id: id})
+                .then(({data}) => {
+                    let user = data.data
+                    commit("SET_USER", user);
+                    commit("SET_SNACKBAR", {
+                        show: true, color: 'success',
+                        text: 'Profile Picture Removed Successfully'
+                    });
+                }).catch((error) => {
                     commit("SET_SNACKBAR", {
                         show: true, color: 'error',
                         text: error.response.data.message

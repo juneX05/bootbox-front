@@ -8,7 +8,7 @@
                         <b>Name</b> : {{form.name}}
                     </v-list-item>
                     <v-list-item>
-                        <b>Uploaded By</b> : {{form.user.name}}
+                        <b>Uploaded By</b> : {{ form.user ? form.user.name : ''}}
                     </v-list-item>
                     <v-list-item>
                         <b>Description</b> : {{form.description}}

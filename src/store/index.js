@@ -111,11 +111,11 @@ export default new Vuex.Store({
             // commit("SET_REFRESHING_TOKEN", true);
 
             await this._vm.$axios.get(process.env.VUE_APP_CURRENT_USER_API_URL).then(({data}) => {
-
-                commit("SET_CURRENT_USER", data);
+                let user = data.data[0];
+                commit("SET_CURRENT_USER", user);
 
                 commit("SET_SNACKBAR", {
-                    show: true, text: "Welcome back " + data.name, color: 'success'
+                    show: true, text: "Welcome back " + user.name, color: 'success'
                 });
             }).catch(() => {
                 // commit("SET_REFRESHING_TOKEN", false);
@@ -138,6 +138,7 @@ export default new Vuex.Store({
         logout({commit}) {
             cookies.remove("x-access-token");
             commit("REMOVE_TOKEN");
+            commit("SET_CURRENT_USER", null);
             router.push({name: 'home'});
         },
 

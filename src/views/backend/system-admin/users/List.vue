@@ -4,19 +4,7 @@
             <v-card class="pt-2 ">
                 <v-row align="center" class="spacer mb-1" justify="space-around" no-gutters>
                     <v-col cols="4">
-                        <v-avatar :color="props.item.profile_picture ? '' : randomColor()"
-                                  size="80px"
-                        >
-                            <img
-                                    :alt=" props.item.name "
-                                    :src=" host + '/public' + props.item.profile_picture.path "
-                                    v-if=" props.item.profile_picture "
-                            >
-                            <v-icon size="30px"
-                                    v-else
-                                    v-text="getInitials(props.item.name)"
-                            ></v-icon>
-                        </v-avatar>
+                        <avatar :name="props.item.name" :profile_picture="props.item.profile_picture"></avatar>
                     </v-col>
                     <v-col cols="8">
                         <v-card-title class="subheading font-weight-bold text-break">{{ props.item.name }}
@@ -42,18 +30,17 @@
 
 <script>
     import Listings from "../../../../components/Listings";
+    import Avatar from "../../../../components/Avatar";
 
     export default {
         name: 'UsersList',
-        components: {Listings},
+        components: {Avatar, Listings},
         data() {
             return {
                 keys: [
                     'name'
                 ],
                 item: {},
-                host: process.env.VUE_APP_API_HOST,
-                colors: ['success', 'error', 'info']
             }
         },
         computed: {
@@ -74,15 +61,6 @@
                     action: 'deleteUser'
                 });
             },
-            randomColor() {
-                let index = Math.floor(Math.random() * (3 - 0) + 0);
-                return this.colors[index];
-            },
-            getInitials(full_name) {
-                let names = full_name.split(' ');
-                let initial = names[0].charAt(0) + (names.length > 0 ? names[1].charAt(0) : '');
-                return initial.toUpperCase()
-            }
         },
     }
 </script>

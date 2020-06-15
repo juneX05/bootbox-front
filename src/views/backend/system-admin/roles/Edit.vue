@@ -53,6 +53,7 @@
             }
         },
         created() {
+            this.$store.commit("SET_ROLE", {});
             this.$store.dispatch('loader', 'loadPermissions');
             this.$store.dispatch('loader', {action: 'getRole', payload: this.id});
         },

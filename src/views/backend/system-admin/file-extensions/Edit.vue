@@ -50,6 +50,7 @@
             }
         },
         created() {
+            this.$store.commit('SET_FILE_EXTENSION', {});
             this.$store.dispatch('loader', {action: 'getFileExtension', payload: this.id});
         },
         methods: {

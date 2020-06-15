@@ -15,10 +15,6 @@ const permissions = {
             return state.permission;
         },
 
-        getPermissionById: (state) => (id) => {
-            return state.allPermissions.find(permission => permission.id === id)
-        },
-
         getPermissionsCount(state) {
             return state.allPermissions.length
         },
@@ -30,15 +26,6 @@ const permissions = {
     mutations: {
         SET_PERMISSIONS(state, permissions) {
             state.allPermissions = permissions;
-        },
-
-        ADD_PERMISSION(state, permission) {
-            state.allPermissions.push(permission);
-        },
-
-        UPDATE_PERMISSION(state, {id, permission}) {
-            let index = state.allPermissions.findIndex(permission => permission.id === id);
-            state.allPermissions[index] = permission;
         },
 
         DELETE_PERMISSION(state, id) {
@@ -63,9 +50,8 @@ const permissions = {
         },
 
         async addPermission({commit}, formInput) {
-            commit("SET_LOADING", true);
+            commit("SET_PERMISSIONS", []);
             await this._vm.$axios.post('/permissions', formInput).then(() => {
-                commit("ADD_PERMISSION", formInput);
                 router.push({name: 'permissions-list'})
                 commit("SET_SNACKBAR", {
                     show: true, color: 'success',
@@ -82,9 +68,9 @@ const permissions = {
         },
 
         async updatePermission({commit}, {id, formInput}) {
+            commit("SET_PERMISSIONS", []);
             await this._vm.$axios.put('/permissions/' + id, formInput)
                 .then(() => {
-                    commit("UPDATE_PERMISSION", {id, formInput})
                     router.push({name: 'permissions-list'})
                     commit("SET_PERMISSION", {});
                     commit("SET_SNACKBAR", {

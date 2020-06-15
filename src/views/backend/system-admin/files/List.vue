@@ -3,7 +3,9 @@
         <listings :items="files" :keys="keys" v-slot:default="props">
             <v-card>
                 <v-card-title class="subheading font-weight-bold">{{ props.item.name }}</v-card-title>
-                <v-card-subtitle class=""><b> Owned By: </b> {{ props.item.user.name }}</v-card-subtitle>
+                <v-card-subtitle class="">
+                    <b> Owned By: </b> {{ props.item.user ? props.item.user.name : '' }}
+                </v-card-subtitle>
                 <v-btn :href="`${host_url}/public${props.item.path}`">View File</v-btn>
                 <v-card-subtitle class=""><b> File Type: </b> {{ props.item.file_extension.extension }} file
                 </v-card-subtitle>
