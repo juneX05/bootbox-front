@@ -12,7 +12,8 @@ const sidebar_routes = [
         meta: {
             auth: true,
             title: "Secret",
-            icon: "lock-clock"
+            icon: "lock-clock",
+            permission: false,
         }
     },
     ...roles_routes, ...permissions_routes, ...fileExtensions_routes,

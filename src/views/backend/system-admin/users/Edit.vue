@@ -1,6 +1,6 @@
 <template>
     <v-col cols="12" md="6" sm="8">
-        <v-form v-model="valid">
+        <v-form v-if="$can('users_update')" v-model="valid">
             <v-card>
                 <v-row align="center" justify="center">
                     <v-card-title>Edit User</v-card-title>
@@ -25,15 +25,17 @@
                 </v-card-actions>
             </v-card>
         </v-form>
+        <not-allowed v-else></not-allowed>
     </v-col>
 </template>
 
 <script>
     import DataForm from "./DataForm";
+    import NotAllowed from "../../NotAllowed";
 
     export default {
         name: 'UserEdit',
-        components: {DataForm},
+        components: {NotAllowed, DataForm},
         props: ['id'],
         computed: {
             loading() {
