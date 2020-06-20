@@ -7,20 +7,22 @@ const navbar_routes = [
 		name: "home",
 		component: Home,
 		meta: {
-			auth: false,
-			title: "Home",
-			icon: "home"
-		}
+            auth: false,
+            title: "Home",
+            icon: "home",
+            permission: false,
+        }
 	},
 	{
 		path: "/about",
 		name: "about",
 		component: About,
 		meta: {
-			auth: false,
-			title: "About",
-			icon: "information"
-		}
+            auth: false,
+            title: "About",
+            icon: "information",
+            permission: false
+        }
 	}
 ];
 

@@ -1,6 +1,6 @@
 <template>
     <v-row align="center" justify="center">
-        <v-col cols="12" md="6" sm="8">
+        <v-col cols="12" md="6" sm="8" v-if="$can('roles_show')">
             <v-card>
                 <v-card-title>Describe Role</v-card-title>
                 <v-card-text>
@@ -20,12 +20,15 @@
                 </v-card-text>
             </v-card>
         </v-col>
+        <not-allowed v-else></not-allowed>
     </v-row>
 </template>
 
 <script>
+    import NotAllowed from "../../NotAllowed";
     export default {
         name: 'RoleShow',
+        components: {NotAllowed},
         props: ['id'],
         computed: {
             loading() {

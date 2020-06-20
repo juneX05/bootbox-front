@@ -6,7 +6,8 @@ const roles_routes = [
         meta: {
             auth: true,
             title: "Roles",
-            icon: "lock"
+            icon: "lock",
+            permission: 'roles_access'
         },
         children: [
             {
@@ -14,7 +15,8 @@ const roles_routes = [
                 name: 'roles-dashboard',
                 component: () => import('./Dashboard'),
                 meta: {
-                    auth: true, title: 'Roles Dashboard', icon: 'lock', exact: true
+                    auth: true, title: 'Roles Dashboard', icon: 'lock', exact: true,
+                    permission: 'roles_access'
                 }
             },
             {
@@ -22,7 +24,8 @@ const roles_routes = [
                 name: 'roles-list',
                 component: () => import('./List'),
                 meta: {
-                    auth: true, title: 'All Roles', icon: 'lock-open', exact: true
+                    auth: true, title: 'All Roles', icon: 'lock-open', exact: true,
+                    permission: 'roles_access'
                 }
             },
             {
@@ -30,7 +33,8 @@ const roles_routes = [
                 name: 'roles-create',
                 component: () => import('./Create'),
                 meta: {
-                    auth: true, title: 'Add Role', icon: 'lock-plus', exact: true
+                    auth: true, title: 'Add Role', icon: 'lock-plus', exact: true,
+                    permission: 'roles_store'
                 }
             },
             {
@@ -39,7 +43,8 @@ const roles_routes = [
                 component: () => import('./Edit'),
                 props: true,
                 meta: {
-                    auth: true, title: 'Edit Role', icon: 'lock-search'
+                    auth: true, title: 'Edit Role', icon: 'lock-search',
+                    permission: 'roles_update'
                 }
             },
             {
@@ -48,7 +53,8 @@ const roles_routes = [
                 component: () => import('./Show'),
                 props: true,
                 meta: {
-                    auth: true, title: 'Edit Role', icon: 'lock-search'
+                    auth: true, title: 'Edit Role', icon: 'lock-search',
+                    permission: 'roles_show'
                 }
             },
         ]

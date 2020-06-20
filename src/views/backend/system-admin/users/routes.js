@@ -6,7 +6,8 @@ const users_routes = [
         meta: {
             auth: true,
             title: "Users",
-            icon: "lock"
+            icon: "lock",
+            permission: 'users_access'
         },
         children: [
             {
@@ -14,7 +15,8 @@ const users_routes = [
                 name: 'users-dashboard',
                 component: () => import('./Dashboard'),
                 meta: {
-                    auth: true, title: 'Users Dashboard', icon: 'lock', exact: true
+                    auth: true, title: 'Users Dashboard', icon: 'lock', exact: true,
+                    permission: 'users_access'
                 }
             },
             {
@@ -22,7 +24,8 @@ const users_routes = [
                 name: 'users-list',
                 component: () => import('./List'),
                 meta: {
-                    auth: true, title: 'All Users', icon: 'lock-open', exact: true
+                    auth: true, title: 'All Users', icon: 'lock-open', exact: true,
+                    permission: 'users_access'
                 }
             },
             {
@@ -30,7 +33,8 @@ const users_routes = [
                 name: 'users-create',
                 component: () => import('./Create'),
                 meta: {
-                    auth: true, title: 'Add User', icon: 'lock-plus', exact: true
+                    auth: true, title: 'Add User', icon: 'lock-plus', exact: true,
+                    permission: 'users_store'
                 }
             },
             {
@@ -39,7 +43,8 @@ const users_routes = [
                 component: () => import('./Edit'),
                 props: true,
                 meta: {
-                    auth: true, title: 'Edit User', icon: 'lock-search'
+                    auth: true, title: 'Edit User', icon: 'lock-search',
+                    permission: 'users_update'
                 }
             },
             {
@@ -48,7 +53,8 @@ const users_routes = [
                 component: () => import('./Show'),
                 props: true,
                 meta: {
-                    auth: true, title: 'Edit User', icon: 'lock-search'
+                    auth: true, title: 'Show User', icon: 'lock-search',
+                    permission: 'users_show'
                 }
             },
         ]

@@ -1,6 +1,6 @@
 <template>
     <v-container fluid>
-        <listings :items="files" :keys="keys" v-slot:default="props">
+        <listings :items="files" :keys="keys" v-if="$can('files_access')" v-slot:default="props">
             <v-card>
                 <v-card-title class="subheading font-weight-bold">{{ props.item.name }}</v-card-title>
                 <v-card-subtitle class="">
@@ -13,24 +13,35 @@
                 <v-divider></v-divider>
 
                 <v-card-actions>
-                    <v-btn @click="goTo('files-edit',{id:props.item.id})" small>Rename</v-btn>
+                    <v-btn @click="goTo('files-edit',{id:props.item.id})"
+                           small v-if="$can('files_update')">Rename
+                    </v-btn>
                     <v-spacer/>
-                    <v-btn @click="goTo('files-show', {id:props.item.id})" small>More...</v-btn>
+                    <v-btn @click="goTo('files-show', {id:props.item.id})"
+                           small v-if="$can('files_show')">More...
+                    </v-btn>
                     <v-spacer/>
-                    <v-btn @click.prevent="confirmDelete()" small v-if="props.item.id === item.id">Confirm</v-btn>
-                    <v-btn @click.prevent="prepareDelete(props.item)" small v-else>Delete</v-btn>
+                    <v-btn @click.prevent="confirmDelete()" small
+                           v-if="$can('files_destroy') && props.item.id === item.id">Confirm
+                    </v-btn>
+                    <v-btn
+                            @click.prevent="prepareDelete(props.item)"
+                            small v-if="$can('files_destroy')">Delete
+                    </v-btn>
                 </v-card-actions>
             </v-card>
         </listings>
+        <not-allowed v-else></not-allowed>
     </v-container>
 </template>
 
 <script>
     import Listings from "../../../../components/Listings";
+    import NotAllowed from "../../NotAllowed";
 
     export default {
         name: 'FilesList',
-        components: {Listings},
+        components: {NotAllowed, Listings},
         data() {
             return {
                 keys: [

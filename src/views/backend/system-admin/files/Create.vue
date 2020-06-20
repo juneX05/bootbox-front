@@ -1,6 +1,6 @@
 <template>
     <v-col cols="12" md="6" sm="8">
-        <v-form enctype="multipart/form-data" v-model="valid">
+        <v-form enctype="multipart/form-data" v-if="$can('file_store')" v-model="valid">
             <v-card>
                 <v-row align="center" justify="center">
                     <v-card-title>Create File</v-card-title>
@@ -20,15 +20,17 @@
                 </v-card-actions>
             </v-card>
         </v-form>
+        <not-allowed v-else></not-allowed>
     </v-col>
 </template>
 
 <script>
     import DataForm from "./DataForm";
+    import NotAllowed from "../../NotAllowed";
 
     export default {
         name: 'FileCreate',
-        components: {DataForm},
+        components: {NotAllowed, DataForm},
         props: ['id'],
         computed: {
             loading() {

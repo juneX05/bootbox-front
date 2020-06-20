@@ -1,18 +1,20 @@
 <template>
 	<v-list align="left" dense nav>
 		<template v-if="!$vuetify.breakpoint.mdAndUp">
-			<v-list-item
-					:exact="item.meta.exact"
-					:key=" 'navbar' + index "
-					:to="item.path"
-					v-for="(item,index) in navbar_items"
-			>
-				<v-list-item-icon>
-					<v-icon>mdi-{{item.meta.icon}}</v-icon>
-				</v-list-item-icon>
+			<template v-for="(item,index) in navbar_items">
+				<v-list-item
+						:exact="item.meta.exact"
+						:key=" 'navbar' + index "
+						:to="item.path"
+						v-if="$can(item.meta.permission) "
+				>
+					<v-list-item-icon>
+						<v-icon>mdi-{{item.meta.icon}}</v-icon>
+					</v-list-item-icon>
 
-				<v-list-item-title>{{item.meta.title}}</v-list-item-title>
-			</v-list-item>
+					<v-list-item-title>{{item.meta.title}}</v-list-item-title>
+				</v-list-item>
+			</template>
 		</template>
 		<template v-for="(item,index) in sidebar_items">
 			<template v-if="authenticated">
@@ -20,7 +22,7 @@
 						:exact="item.meta.exact"
 						:key=" 'sidebar' + index "
 						:to="item.path"
-						v-if="!item.children"
+						v-if="!item.children && $can(item.meta.permission)"
 				>
 					<v-list-item-icon>
 						<v-icon>mdi-{{item.meta.icon}}</v-icon>
@@ -32,7 +34,7 @@
 				<v-list-group
 						:key=" 'sidebar' + index "
 						:prepend-icon=" `mdi-${item.meta.icon}` "
-						v-if="item.children"
+						v-if="item.children && $can(item.meta.permission)"
 						:value="$route.name.split('-')[0] === item.name"
 				>
 					<template v-slot:activator>
@@ -44,7 +46,7 @@
 								:exact="child.meta.exact"
 								:key=" 'child' + index "
 								:to="child.path" link
-								v-if="!child.props">
+								v-if="!child.props && $can(child.meta.permission)">
 							<v-list-item-icon>
 								<v-icon>mdi-{{child.meta.icon}}</v-icon>
 							</v-list-item-icon>

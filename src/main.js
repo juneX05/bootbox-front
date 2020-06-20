@@ -39,6 +39,22 @@ Vue.mixin({
                 formData.append(key, form_data[key]);
             });
             return formData;
+        },
+
+        $can(permissionName) {
+            if (permissionName !== false) {
+                let currentUser = this.$store.state.current_user;
+                if (currentUser) {
+                    let permissions = currentUser.permissions;
+                    if (permissions) {
+                        let permission = permissions.find(permission => permission.name === permissionName);
+                        return permission !== undefined
+                    }
+                }
+
+                return false;
+            }
+            return true;
         }
     },
     computed: {

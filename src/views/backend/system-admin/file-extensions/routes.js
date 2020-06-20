@@ -6,7 +6,8 @@ const fileExtensions_routes = [
         meta: {
             auth: true,
             title: "FileExtensions",
-            icon: "lock"
+            icon: "lock",
+            permission: 'file_extension_access'
         },
         children: [
             {
@@ -14,7 +15,8 @@ const fileExtensions_routes = [
                 name: 'fileExtensions-dashboard',
                 component: () => import('./Dashboard'),
                 meta: {
-                    auth: true, title: 'FileExtensions Dashboard', icon: 'lock', exact: true
+                    auth: true, title: 'FileExtensions Dashboard', icon: 'lock', exact: true,
+                    permission: 'file_extension_access',
                 }
             },
             {
@@ -22,7 +24,8 @@ const fileExtensions_routes = [
                 name: 'fileExtensions-list',
                 component: () => import('./List'),
                 meta: {
-                    auth: true, title: 'All FileExtensions', icon: 'lock-open', exact: true
+                    auth: true, title: 'All FileExtensions', icon: 'lock-open', exact: true,
+                    permission: 'file_extension_access',
                 }
             },
             {
@@ -30,7 +33,8 @@ const fileExtensions_routes = [
                 name: 'fileExtensions-create',
                 component: () => import('./Create'),
                 meta: {
-                    auth: true, title: 'Add FileExtension', icon: 'lock-plus', exact: true
+                    auth: true, title: 'Add FileExtension', icon: 'lock-plus', exact: true,
+                    permission: 'file_extension_store',
                 }
             },
             {
@@ -39,7 +43,8 @@ const fileExtensions_routes = [
                 component: () => import('./Edit'),
                 props: true,
                 meta: {
-                    auth: true, title: 'Edit FileExtension', icon: 'lock-search'
+                    auth: true, title: 'Edit FileExtension', icon: 'lock-search',
+                    permission: 'file_extension_update',
                 }
             },
             {
@@ -48,7 +53,8 @@ const fileExtensions_routes = [
                 component: () => import('./Show'),
                 props: true,
                 meta: {
-                    auth: true, title: 'Edit FileExtension', icon: 'lock-search'
+                    auth: true, title: 'Show FileExtension', icon: 'lock-search',
+                    permission: 'file_extension_show'
                 }
             },
         ]

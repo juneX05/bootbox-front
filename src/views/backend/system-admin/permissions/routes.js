@@ -6,7 +6,8 @@ const permissions_routes = [
         meta: {
             auth: true,
             title: "Permissions",
-            icon: "lock"
+            icon: "lock",
+            permission: 'permissions_access'
         },
         children: [
             {
@@ -14,7 +15,8 @@ const permissions_routes = [
                 name: 'permissions-dashboard',
                 component: () => import('./Dashboard'),
                 meta: {
-                    auth: true, title: 'Permissions Dashboard', icon: 'lock', exact: true
+                    auth: true, title: 'Permissions Dashboard', icon: 'lock', exact: true,
+                    permission: 'permissions_access'
                 }
             },
             {
@@ -22,7 +24,8 @@ const permissions_routes = [
                 name: 'permissions-list',
                 component: () => import('./List'),
                 meta: {
-                    auth: true, title: 'All Permissions', icon: 'lock-open', exact: true
+                    auth: true, title: 'All Permissions', icon: 'lock-open', exact: true,
+                    permission: 'permissions_access'
                 }
             },
             {
@@ -30,7 +33,8 @@ const permissions_routes = [
                 name: 'permissions-create',
                 component: () => import('./Create'),
                 meta: {
-                    auth: true, title: 'Add Permission', icon: 'lock-plus', exact: true
+                    auth: true, title: 'Add Permission', icon: 'lock-plus', exact: true,
+                    permission: 'permissions_store'
                 }
             },
             {
@@ -39,7 +43,8 @@ const permissions_routes = [
                 component: () => import('./Edit'),
                 props: true,
                 meta: {
-                    auth: true, title: 'Edit Permission', icon: 'lock-search'
+                    auth: true, title: 'Edit Permission', icon: 'lock-search',
+                    permission: 'permissions_update'
                 }
             },
             {
@@ -48,7 +53,8 @@ const permissions_routes = [
                 component: () => import('./Show'),
                 props: true,
                 meta: {
-                    auth: true, title: 'Edit Permission', icon: 'lock-search'
+                    auth: true, title: 'Show Permission', icon: 'lock-search',
+                    permission: 'permissions_show'
                 }
             },
         ]

@@ -6,7 +6,8 @@ const files_routes = [
         meta: {
             auth: true,
             title: "Files",
-            icon: "lock"
+            icon: "lock",
+            permission: 'files_access'
         },
         children: [
             {
@@ -14,7 +15,8 @@ const files_routes = [
                 name: 'files-dashboard',
                 component: () => import('./Dashboard'),
                 meta: {
-                    auth: true, title: 'Files Dashboard', icon: 'lock', exact: true
+                    auth: true, title: 'Files Dashboard', icon: 'lock', exact: true,
+                    permission: 'files_access'
                 }
             },
             {
@@ -22,7 +24,8 @@ const files_routes = [
                 name: 'files-list',
                 component: () => import('./List'),
                 meta: {
-                    auth: true, title: 'All Files', icon: 'lock-open', exact: true
+                    auth: true, title: 'All Files', icon: 'lock-open', exact: true,
+                    permission: 'files_access'
                 }
             },
             {
@@ -30,7 +33,8 @@ const files_routes = [
                 name: 'files-create',
                 component: () => import('./Create'),
                 meta: {
-                    auth: true, title: 'Add File', icon: 'lock-plus', exact: true
+                    auth: true, title: 'Add File', icon: 'lock-plus', exact: true,
+                    permission: 'files_store'
                 }
             },
             {
@@ -39,7 +43,8 @@ const files_routes = [
                 component: () => import('./Edit'),
                 props: true,
                 meta: {
-                    auth: true, title: 'Edit File', icon: 'lock-search'
+                    auth: true, title: 'Edit File', icon: 'lock-search',
+                    permission: 'files_update'
                 }
             },
             {
@@ -48,7 +53,8 @@ const files_routes = [
                 component: () => import('./Show'),
                 props: true,
                 meta: {
-                    auth: true, title: 'Edit File', icon: 'lock-search'
+                    auth: true, title: 'Show File', icon: 'lock-search',
+                    permission: 'files_show'
                 }
             },
         ]
