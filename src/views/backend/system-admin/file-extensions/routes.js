@@ -7,7 +7,7 @@ const fileExtensions_routes = [
             auth: true,
             title: "FileExtensions",
             icon: "lock",
-            permission: 'file_extension_access'
+            permission: 'file_extensions_access'
         },
         children: [
             {
@@ -16,7 +16,7 @@ const fileExtensions_routes = [
                 component: () => import('./Dashboard'),
                 meta: {
                     auth: true, title: 'FileExtensions Dashboard', icon: 'lock', exact: true,
-                    permission: 'file_extension_access',
+                    permission: 'file_extensions_access',
                 }
             },
             {
@@ -25,7 +25,7 @@ const fileExtensions_routes = [
                 component: () => import('./List'),
                 meta: {
                     auth: true, title: 'All FileExtensions', icon: 'lock-open', exact: true,
-                    permission: 'file_extension_access',
+                    permission: 'file_extensions_access',
                 }
             },
             {
@@ -34,7 +34,7 @@ const fileExtensions_routes = [
                 component: () => import('./Create'),
                 meta: {
                     auth: true, title: 'Add FileExtension', icon: 'lock-plus', exact: true,
-                    permission: 'file_extension_store',
+                    permission: 'file_extensions_store',
                 }
             },
             {
@@ -44,7 +44,7 @@ const fileExtensions_routes = [
                 props: true,
                 meta: {
                     auth: true, title: 'Edit FileExtension', icon: 'lock-search',
-                    permission: 'file_extension_update',
+                    permission: 'file_extensions_update',
                 }
             },
             {
@@ -54,7 +54,7 @@ const fileExtensions_routes = [
                 props: true,
                 meta: {
                     auth: true, title: 'Show FileExtension', icon: 'lock-search',
-                    permission: 'file_extension_show'
+                    permission: 'file_extensions_show'
                 }
             },
         ]
