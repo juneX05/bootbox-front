@@ -1,28 +1,30 @@
 <template>
-    <v-row align="center" justify="center">
+    <v-row justify="center">
         <v-col cols="12" md="6" sm="8" v-if="$can('users_show')">
-            <v-card>
+            <v-card align="left">
                 <v-card-title>Describe User</v-card-title>
                 <v-card-text>
-                    <v-list-item>
+                    <div>
                         <b>Name</b> : {{form.name}}
-                    </v-list-item>
-                    <v-list-item>
+                    </div>
+                    <div>
                         <b>Email</b> : {{form.email}}
-                    </v-list-item>
-                    <v-list-item>
-                        <b>Permissions</b> :
-                        <v-chip :key="index"
-                                class="ml-1" color="primary" small v-for="(permission,index) in form.permissions">
-                            {{permission.name}}
-                        </v-chip>
-                    </v-list-item>
-                    <v-list-item>
-                        <b>Roles</b> :
-                        <v-chip class="ml-1" color="primary" small>
+                    </div>
+                    <div>
+                        <b>Role</b> :
+                        <v-chip class="ma-1" color="primary" small>
                             {{form.role.name}}
                         </v-chip>
-                    </v-list-item>
+                    </div>
+                    <div><b>Permissions </b> :</div>
+                    <v-divider/>
+                    <div>
+                        <v-chip :key="index"
+                                class="ma-1" color="primary" small v-for="(permission,index) in form.permissions">
+                            {{permission.name}}
+                        </v-chip>
+                    </div>
+
                 </v-card-text>
             </v-card>
         </v-col>
@@ -56,6 +58,7 @@
             return {}
         },
         created() {
+            this.$store.commit('SET_USER', {});
             this.$store.dispatch('loader', {action: 'getUser', payload: this.id});
         },
         methods: {},

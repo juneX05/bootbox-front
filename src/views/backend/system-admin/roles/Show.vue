@@ -5,18 +5,25 @@
                 <v-card-title>Describe Role</v-card-title>
                 <v-card-text>
                     <v-list-item>
-                        <b>Name</b> : {{form.name}}
+                        <v-list-item-content>Name</v-list-item-content>
+                        <v-list-item-content>{{form.name}}</v-list-item-content>
                     </v-list-item>
                     <v-list-item>
-                        <b>Description</b> : {{form.description}}
+                        <v-list-item-content>Description</v-list-item-content>
+                        <v-list-item-content>{{form.description || 'null'}}</v-list-item-content>
                     </v-list-item>
+                    <v-divider/>
                     <v-list-item>
-                        <b>Permissions</b> :
+                        <v-list-item-content>
+                            <div>Permissions</div>
+                        </v-list-item-content>
+                    </v-list-item>
+                    <div>
                         <v-chip :key="index"
-                                class="ml-1" color="primary" small v-for="(permission,index) in form.permissions">
+                                class="ma-1" color="primary" small v-for="(permission,index) in form.permissions">
                             {{permission.name}}
                         </v-chip>
-                    </v-list-item>
+                    </div>
                 </v-card-text>
             </v-card>
         </v-col>
@@ -50,6 +57,7 @@
             return {}
         },
         created() {
+            this.$store.commit('SET_ROLES', {});
             this.$store.dispatch('loader', {action: 'getRole', payload: this.id});
         },
         methods: {},

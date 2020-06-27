@@ -46,6 +46,11 @@ const permissions = {
             await this._vm.$axios.get("/permissions").then(({data}) => {
                 const permissions = data.data;
                 commit("SET_PERMISSIONS", permissions);
+            }).catch((error) => {
+                commit("SET_SNACKBAR", {
+                    show: true, color: 'error',
+                    text: error.response.data.message
+                });
             });
         },
 
@@ -89,7 +94,12 @@ const permissions = {
         async getPermission({commit}, id) {
             await this._vm.$axios.get('/permissions/' + id)
                 .then(({data}) => {
-                    commit('SET_PERMISSION', data.data[0]);
+                    commit('SET_PERMISSION', data.data);
+                }).catch((error) => {
+                    commit("SET_SNACKBAR", {
+                        show: true, color: 'error',
+                        text: error.response.data.message
+                    });
                 })
         },
 
@@ -100,6 +110,11 @@ const permissions = {
                     commit("SET_SNACKBAR", {
                         show: true, color: 'success',
                         text: 'Permission Deleted Successfully'
+                    });
+                }).catch((error) => {
+                    commit("SET_SNACKBAR", {
+                        show: true, color: 'error',
+                        text: error.response.data.message
                     });
                 })
         }

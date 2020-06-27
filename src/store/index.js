@@ -7,12 +7,13 @@ import permissions from "../views/backend/system-admin/permissions/store";
 import fileExtensions from "../views/backend/system-admin/file-extensions/store";
 import files from "../views/backend/system-admin/files/store";
 import users from "../views/backend/system-admin/users/store";
+import profiles from "../views/backend/profile/store";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
     modules: {
-        roles, permissions, fileExtensions, files, users
+        roles, permissions, fileExtensions, files, users, profiles
         // other modules here ...
     },
     state: {
@@ -84,17 +85,14 @@ export default new Vuex.Store({
             commit("SET_REFRESHING_TOKEN", false);
         },
 
-        async refreshToken({dispatch, getters}) {
+        async refreshToken({dispatch}) {
 
             // commit("SET_REFRESHING_TOKEN", true);
-
             this._vm.$axios.post(process.env.VUE_APP_REFRESH_TOKEN_API_URL).then(async ({data}) => {
                 const {token, expiresIn} = data;
                 dispatch("setToken", {token, expiresIn});
 
-                if (!getters.getCurrentUser) {
-                    await dispatch("getCurrentUser");
-                }
+                await dispatch("getCurrentUser");
 
                 if (window.location.pathname === '/login') {
                     await router.push({name: 'secret'})
@@ -106,17 +104,20 @@ export default new Vuex.Store({
             });
         },
 
-        async getCurrentUser({commit}) {
+        async getCurrentUser({commit, getters}) {
 
             // commit("SET_REFRESHING_TOKEN", true);
 
             await this._vm.$axios.get(process.env.VUE_APP_CURRENT_USER_API_URL).then(({data}) => {
                 let user = data.data[0];
-                commit("SET_CURRENT_USER", user);
 
-                commit("SET_SNACKBAR", {
-                    show: true, text: "Welcome back " + user.name, color: 'success'
-                });
+                if (!getters.getCurrentUser) {
+                    commit("SET_SNACKBAR", {
+                        show: true, text: "Welcome back " + user.name, color: 'success'
+                    });
+                }
+
+                commit("SET_CURRENT_USER", user);
             }).catch(() => {
                 // commit("SET_REFRESHING_TOKEN", false);
             });

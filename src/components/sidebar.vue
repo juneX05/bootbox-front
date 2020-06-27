@@ -6,7 +6,6 @@
 						:exact="item.meta.exact"
 						:key=" 'navbar' + index "
 						:to="item.path"
-						v-if="$can(item.meta.permission) "
 				>
 					<v-list-item-icon>
 						<v-icon>mdi-{{item.meta.icon}}</v-icon>
@@ -35,7 +34,7 @@
 						:key=" 'sidebar' + index "
 						:prepend-icon=" `mdi-${item.meta.icon}` "
 						v-if="item.children && $can(item.meta.permission)"
-						:value="$route.name.split('-')[0] === item.name"
+						:value="$route.name ? $route.name.split('-')[0] === item.name : false"
 				>
 					<template v-slot:activator>
 						<v-list-item-title>{{item.meta.title}}</v-list-item-title>

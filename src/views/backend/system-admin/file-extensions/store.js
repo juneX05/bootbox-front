@@ -46,6 +46,11 @@ const fileExtensions = {
             await this._vm.$axios.get("/fileExtensions").then(({data}) => {
                 const fileExtensions = data.data;
                 commit("SET_FILE_EXTENSIONS", fileExtensions);
+            }).catch((error) => {
+                commit("SET_SNACKBAR", {
+                    show: true, color: 'error',
+                    text: error.response.data.message
+                });
             });
         },
 
@@ -58,7 +63,10 @@ const fileExtensions = {
                     text: 'New File Extension Added Successfully'
                 });
             }).catch((error) => {
-                commit("SET_VALIDATION_ERRORS", error.response.data.errors);
+                commit("SET_SNACKBAR", {
+                    show: true, color: 'error',
+                    text: error.response.data.message
+                });
             })
             commit("SET_LOADING", false);
         },
@@ -85,7 +93,12 @@ const fileExtensions = {
         async getFileExtension({commit}, id) {
             await this._vm.$axios.get('/fileExtensions/' + id)
                 .then(({data}) => {
-                    commit('SET_FILE_EXTENSION', data.data[0]);
+                    commit('SET_FILE_EXTENSION', data.data);
+                }).catch((error) => {
+                    commit("SET_SNACKBAR", {
+                        show: true, color: 'error',
+                        text: error.response.data.message
+                    });
                 })
         },
 
@@ -96,6 +109,11 @@ const fileExtensions = {
                     commit("SET_SNACKBAR", {
                         show: true, color: 'success',
                         text: 'File Extension Deleted Successfully'
+                    });
+                }).catch((error) => {
+                    commit("SET_SNACKBAR", {
+                        show: true, color: 'error',
+                        text: error.response.data.message
                     });
                 })
         }

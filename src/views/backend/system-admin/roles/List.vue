@@ -17,14 +17,16 @@
                             small v-if="$can('roles_show')">More...
                     </v-btn>
                     <v-spacer/>
-                    <v-btn
-                            @click.prevent="confirmDelete()"
-                            small v-if="props.item.id === item.id && $can('roles_destroy')">Confirm
-                    </v-btn>
-                    <v-btn
-                            @click.prevent="prepareDelete(props.item)"
-                            small v-if="$can('roles_destroy')">Delete
-                    </v-btn>
+                    <div v-if="$can('roles_destroy')">
+                        <v-btn @click.prevent="confirmDelete()"
+                               small
+                               v-if="props.item.id === item.id">Confirm
+                        </v-btn>
+                        <v-btn @click.prevent="prepareDelete(props.item)"
+                               small
+                               v-else>Delete
+                        </v-btn>
+                    </div>
                 </v-card-actions>
             </v-card>
         </listings>

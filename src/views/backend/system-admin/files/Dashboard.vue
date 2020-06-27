@@ -1,6 +1,6 @@
 <template>
     <v-col cols="12">
-        <v-row align="center" justify="center" v-if="$can('file_access')">
+        <v-row align="center" justify="center" v-if="$can('files_access')">
             <h1>Total Files : {{ filesCount }}</h1>
         </v-row>
         <not-allowed v-else></not-allowed>
