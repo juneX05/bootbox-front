@@ -46,6 +46,11 @@ const users = {
             await this._vm.$axios.get("/users").then(({data}) => {
                 const users = data.data;
                 commit("SET_USERS", users);
+            }).catch((error) => {
+                commit("SET_SNACKBAR", {
+                    show: true, color: 'error',
+                    text: error.response.data.message
+                });
             });
         },
 
@@ -105,7 +110,12 @@ const users = {
         async getUser({commit}, id) {
             await this._vm.$axios.get('/users/' + id)
                 .then(({data}) => {
-                    commit('SET_USER', data.data[0]);
+                    commit('SET_USER', data.data);
+                }).catch((error) => {
+                    commit("SET_SNACKBAR", {
+                        show: true, color: 'error',
+                        text: error.response.data.message
+                    });
                 })
         },
 

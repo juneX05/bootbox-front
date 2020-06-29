@@ -10,7 +10,6 @@ const navbar_routes = [
             auth: false,
             title: "Home",
             icon: "home",
-            permission: false,
         }
 	},
 	{
@@ -21,7 +20,6 @@ const navbar_routes = [
             auth: false,
             title: "About",
             icon: "information",
-            permission: false
         }
 	}
 ];

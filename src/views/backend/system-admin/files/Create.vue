@@ -1,6 +1,6 @@
 <template>
     <v-col cols="12" md="6" sm="8">
-        <v-form enctype="multipart/form-data" v-if="$can('file_store')" v-model="valid">
+        <v-form enctype="multipart/form-data" v-if="$can('files_store')" v-model="valid">
             <v-card>
                 <v-row align="center" justify="center">
                     <v-card-title>Create File</v-card-title>

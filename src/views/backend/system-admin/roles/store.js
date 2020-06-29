@@ -46,6 +46,11 @@ const roles = {
             await this._vm.$axios.get("/roles").then(({data}) => {
                 const roles = data.data;
                 commit("SET_ROLES", roles);
+            }).catch((error) => {
+                commit("SET_SNACKBAR", {
+                    show: true, color: 'error',
+                    text: error.response.data.message
+                });
             });
         },
 
@@ -89,7 +94,12 @@ const roles = {
         async getRole({commit}, id) {
             await this._vm.$axios.get('/roles/' + id)
                 .then(({data}) => {
-                    commit('SET_ROLE', data.data[0]);
+                    commit('SET_ROLE', data.data);
+                }).catch((error) => {
+                    commit("SET_SNACKBAR", {
+                        show: true, color: 'error',
+                        text: error.response.data.message
+                    });
                 })
         },
 
@@ -100,6 +110,11 @@ const roles = {
                     commit("SET_SNACKBAR", {
                         show: true, color: 'success',
                         text: 'Role Removed Successfully'
+                    });
+                }).catch((error) => {
+                    commit("SET_SNACKBAR", {
+                        show: true, color: 'error',
+                        text: error.response.data.message
                     });
                 })
         }

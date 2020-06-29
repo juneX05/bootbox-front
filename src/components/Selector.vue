@@ -1,6 +1,7 @@
 <template>
     <v-select :error-messages="error_messages" :item-text="item_text" :items="items" :rules="rules"
-              :label="label" :menu-props="{closeOnContentClick:true}" chips
+              :label="label"
+              :menu-props="{closeOnContentClick:true}" @change=" change " chips clearable
               :multiple="multiple" dense outlined return-object small-chips v-model="selections">
         <template v-if="multiple" v-slot:prepend-item>
             <v-list-item @click="selectToggle" ripple>
@@ -32,6 +33,10 @@
             label: {type: String, default: 'Enter Date'},
             required: {type: Boolean, default: false},
             multiple: {type: Boolean, default: true},
+            change: {
+                type: Function, default: () => {
+                }
+            },
         },
         methods: {
             selectToggle() {

@@ -46,6 +46,11 @@ const files = {
             await this._vm.$axios.get("/files").then(({data}) => {
                 const files = data.data;
                 commit("SET_FILES", files);
+            }).catch((error) => {
+                commit("SET_SNACKBAR", {
+                    show: true, color: 'error',
+                    text: error.response.data.message
+                });
             });
         },
 
@@ -89,7 +94,12 @@ const files = {
         async getFile({commit}, id) {
             await this._vm.$axios.get('/files/' + id)
                 .then(({data}) => {
-                    commit('SET_FILE', data.data[0]);
+                    commit('SET_FILE', data.data);
+                }).catch((error) => {
+                    commit("SET_SNACKBAR", {
+                        show: true, color: 'error',
+                        text: error.response.data.message
+                    });
                 })
         },
 
@@ -100,6 +110,11 @@ const files = {
                     commit("SET_SNACKBAR", {
                         show: true, color: 'success',
                         text: 'File Deleted Successfully'
+                    });
+                }).catch((error) => {
+                    commit("SET_SNACKBAR", {
+                        show: true, color: 'error',
+                        text: error.response.data.message
                     });
                 })
         }

@@ -34,6 +34,14 @@
 			<v-list-item-title>Switch to {{dark ? 'Light' : 'Dark' }} Theme</v-list-item-title>
 		</v-list-item>
 
+		<v-list-item :to="{name:'profile'}" v-if="authenticated">
+			<v-list-item-icon>
+				<v-icon>mdi-account-circle</v-icon>
+			</v-list-item-icon>
+
+			<v-list-item-title>Profile</v-list-item-title>
+		</v-list-item>
+
 		<v-list-item @click="logout" style="background-color:red" v-if="authenticated">
 			<v-list-item-icon>
 				<v-icon>mdi-logout</v-icon>

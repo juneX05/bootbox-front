@@ -46,6 +46,7 @@
             return {}
         },
         created() {
+            this.$store.commit('SET_FILE', {});
             this.$store.dispatch('loader', {action: 'getFile', payload: this.id});
         },
         methods: {},

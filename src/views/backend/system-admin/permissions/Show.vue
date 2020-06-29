@@ -43,6 +43,7 @@
             return {}
         },
         created() {
+            this.$store.commit('SET_PERMISSION', {});
             this.$store.dispatch('loader', {action: 'getPermission', payload: this.id});
         },
         methods: {},

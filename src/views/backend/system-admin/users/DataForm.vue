@@ -54,20 +54,20 @@
         </v-col>
         <v-col cols="12">
             <selector
+                    :change=" roleChanged "
+                    :error-messages="apiValidationErrors['role'] || '' " :items="roles"
+                    :multiple="false"
+                    item_text="name" label="Role"
+                    v-model="form.role"
+            ></selector>
+        </v-col>
+        <v-col cols="12">
+            <selector
                     :error-messages="apiValidationErrors['permissions'] || '' "
                     :items="permissions"
                     @change="apiValidationErrors['permissions'] = '' "
                     item_text="name" label="Permissions"
                     v-model="form.permissions"
-            ></selector>
-        </v-col>
-        <v-col cols="12">
-            <selector
-                    :error-messages="apiValidationErrors['role'] || '' "
-                    :items="roles" :multiple="false"
-                    @change="apiValidationErrors['role'] = '' "
-                    item_text="name" label="Role"
-                    v-model="form.role"
             ></selector>
         </v-col>
     </v-row>
@@ -90,6 +90,14 @@
         data() {
             return {
                 ...validations
+            }
+        },
+        methods: {
+            roleChanged() {
+                console.log(this.form.role)
+                if (this.form.permissions.length === 0) {
+                    this.form.permissions = this.form.role.permissions
+                }
             }
         }
     }

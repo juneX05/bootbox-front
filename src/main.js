@@ -34,17 +34,19 @@ Vue.mixin({
             let formKeys = Object.keys(form_data);
             formKeys.forEach((key) => {
                 if (typeof form_data[key] === 'object' && !skipper.includes(key)) {
-                    form_data[key] = JSON.stringify(form_data[key])
+                    formData.append(key, JSON.stringify(form_data[key]));
+                } else {
+                    formData.append(key, form_data[key]);
                 }
-                formData.append(key, form_data[key]);
             });
             return formData;
         },
 
         $can(permissionName) {
+            let currentUser = this.$store.state.current_user;
             if (permissionName !== false) {
-                let currentUser = this.$store.state.current_user;
                 if (currentUser) {
+                    if (currentUser.id === 1) return true //superadmin
                     let permissions = currentUser.permissions;
                     if (permissions) {
                         let permission = permissions.find(permission => permission.name === permissionName);
